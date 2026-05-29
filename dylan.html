@@ -260,26 +260,27 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 
 /* HEATMAP */
 .hmap-outer{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
-.hmap-inner{display:flex;gap:2px;min-width:max-content}
-.hmap-daycol{display:flex;flex-direction:column;gap:2px}
-.hmap-mlbl{font-size:9px;color:var(--t3);height:14px;line-height:14px;overflow:hidden;white-space:nowrap}
-.hmap-cell{width:11px;height:11px;border-radius:2px;background:var(--s3)}
-.hmap-cell.lvl0{background:var(--s3)}
-.hmap-cell.lvl1{background:rgba(79,142,247,.2)}
-.hmap-cell.lvl2{background:rgba(79,142,247,.5)}
+.hmap-inner{display:flex;gap:3px;min-width:max-content}
+.hmap-daycol{display:flex;flex-direction:column;gap:3px}
+.hmap-mlbl{font-size:9px;color:var(--t2);height:14px;line-height:14px;overflow:hidden;white-space:nowrap}
+.hmap-cell{width:12px;height:12px;border-radius:3px;background:rgba(255,255,255,.05)}
+.hmap-cell.lvl0{background:rgba(255,255,255,.05)}
+.hmap-cell.lvl1{background:rgba(79,142,247,.25)}
+.hmap-cell.lvl2{background:rgba(79,142,247,.58)}
 .hmap-cell.lvl3{background:var(--blue)}
 .hmap-cell.lbl-cell{background:transparent;display:flex;align-items:center}
-.hmap-cell.lbl-cell span{font-size:8px;color:var(--t3);line-height:1;width:8px}
-.hmap-foot{font-size:11px;color:var(--t2);margin-top:8px}
-.hmap-legend{display:flex;align-items:center;gap:3px;margin-top:6px;justify-content:flex-end}
-.hmap-legend-lbl{font-size:9px;color:var(--t3)}
+.hmap-cell.lbl-cell span{font-size:8px;color:var(--t2);line-height:1;width:8px}
+.hmap-foot{font-size:11px;color:var(--t2);margin-top:10px}
+.hmap-legend{display:flex;align-items:center;gap:3px;margin-top:8px;justify-content:flex-end}
+.hmap-legend-lbl{font-size:9px;color:var(--t2)}
 /* MILESTONES */
 .milestone-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.ms-item{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:12px;text-align:center;opacity:.35;transition:all .3s}
-.ms-item.unlocked{opacity:1;border-color:rgba(79,142,247,.4);background:var(--blue-d)}
-.ms-icon{font-size:22px;margin-bottom:6px}
+.ms-item{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:14px 12px;text-align:center;opacity:.3;transition:all .3s;position:relative;overflow:hidden}
+.ms-item.unlocked{opacity:1;border-color:rgba(79,142,247,.5);background:linear-gradient(135deg,var(--blue-d),rgba(79,142,247,.06))}
+.ms-item.unlocked::after{content:'✓';position:absolute;top:7px;right:9px;font-size:10px;font-weight:800;color:var(--blue);opacity:.8}
+.ms-icon{font-size:24px;margin-bottom:7px}
 .ms-lbl{font-size:12px;font-weight:800;color:var(--text)}
-.ms-desc{font-size:10px;color:var(--t2);margin-top:2px}
+.ms-desc{font-size:10px;color:var(--t2);margin-top:3px;line-height:1.4}
 .ms-item.unlocked .ms-lbl{color:var(--blue-l)}
 /* NOTES */
 .prog-notes{width:100%;min-height:90px;background:var(--s2);border:1.5px solid var(--s3);border-radius:var(--r-md);padding:12px 14px;color:var(--text);font-size:14px;line-height:1.6;resize:vertical;transition:border-color .15s}
@@ -1174,25 +1175,33 @@ function renderHeatmap(){
 
 // ── MILESTONES ────────────────────────────────────────────
 const MILESTONES=[
-  {id:'log1',icon:'📝',label:'First Log',   desc:'First workout tracked'},
-  {id:'wk1', icon:'🔥',label:'First Week',  desc:'7-day streak'},
-  {id:'mo1', icon:'💪',label:'One Month',   desc:'30-day streak'},
-  {id:'lb5', icon:'📉',label:'5 lbs Down', desc:'First 5 pounds gone'},
-  {id:'half',icon:'🎯',label:'Halfway',     desc:'8 lbs toward 170'},
-  {id:'goal',icon:'⚡',label:'Goal Weight', desc:'170 lbs — 6-pack done'},
-  {id:'b225',icon:'🏋️',label:'225 Bench',  desc:'Two plates pressed'},
-  {id:'d405',icon:'🔱',label:'405 Dead',    desc:'Four plates pulled'},
+  {id:'earlybird',icon:'⏰',label:'Alarm Warrior',   desc:'First 6 AM gym session done'},
+  {id:'evlock',   icon:'🌙',label:'Evening Lock-In', desc:'No food after 7 PM — 3 nights straight'},
+  {id:'wk1',      icon:'🔥',label:'First Week',      desc:'7 days consistent — most quit before this'},
+  {id:'sub180',   icon:'📉',label:'Under 180',       desc:'6 lbs gone. The mirror\'s starting to notice.'},
+  {id:'halfway',  icon:'🎯',label:'Halfway There',   desc:'178 lbs — 8 down, 8 to go'},
+  {id:'goal',     icon:'⚡',label:'170 — Done',      desc:'6-pack weight. You actually did it.'},
+  {id:'newbench', icon:'🏋️',label:'New Bench PR',   desc:'Beat 225 — hit 230 or more'},
+  {id:'pull10',   icon:'💪',label:'10 Clean Pull-ups',desc:'10 reps, no kipping, full hang'},
 ];
 function checkMilestone(id,s){
-  if(id==='log1')return Object.keys(s.workouts||{}).length>0;
+  if(id==='earlybird')return Object.keys(s.workouts||{}).length>0;
+  if(id==='evlock'){
+    let streak=0;const d=new Date();
+    for(let i=0;i<30;i++){
+      const k=dk(d);
+      if((s.evening||{})[k]&&(s.evening||{})[k].ev0)streak++;else break;
+      d.setDate(d.getDate()-1);
+    }
+    return streak>=3;
+  }
   if(id==='wk1')return calcStreak()>=7;
-  if(id==='mo1')return calcStreak()>=30;
   const wts=s.weights||[],cur=(wts[wts.length-1]||{}).val||S_WT;
-  if(id==='lb5')return S_WT-cur>=5;
-  if(id==='half')return (S_WT-cur)/(S_WT-G_WT)>=0.5;
+  if(id==='sub180')return cur<=180;
+  if(id==='halfway')return cur<=178;
   if(id==='goal')return cur<=G_WT;
-  if(id==='b225')return(s.prs||{}).bench>=225;
-  if(id==='d405')return(s.prs||{}).dead>=405;
+  if(id==='newbench')return(s.prs||{}).bench>225;
+  if(id==='pull10')return(s.prs||{}).pullup>=10;
   return false;
 }
 function renderMilestones(){
