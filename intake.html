@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#070c18">
+<title>Blueprint — Client Intake</title>
+<style>
+:root{
+  --bg:#070c18;--s1:#0c1526;--s2:#111d35;--s3:#1a2d4f;
+  --border:rgba(79,142,247,.12);
+  --blue:#4f8ef7;--blue-l:#7eb3ff;--blue-d:rgba(79,142,247,.12);
+  --green:#34d399;--orange:#fbbf24;--red:#f87171;
+  --text:#e8f0fe;--t2:#7b9bc4;--t3:#3a567a;
+  --r-sm:8px;--r-md:14px;--r-lg:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%;font-family:-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+input,button,textarea,select{font-family:inherit;outline:none}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+
+/* ── SHELL ── */
+.shell{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding-bottom:40px}
+
+/* ── HEADER ── */
+.top-bar{
+  position:sticky;top:0;z-index:10;
+  padding:16px 20px 12px;padding-top:calc(16px + env(safe-area-inset-top));
+  background:var(--bg);border-bottom:1px solid var(--border);
+}
+.logo{font-size:18px;font-weight:900;color:var(--blue);letter-spacing:-.5px}
+.logo span{color:var(--text);font-weight:300}
+.logo-sub{font-size:11px;color:var(--t2);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:1px}
+
+/* ── PROGRESS BAR ── */
+.prog-wrap{padding:14px 20px 0}
+.prog-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--t2);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.prog-track{background:var(--s3);border-radius:10px;height:4px;overflow:hidden}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--blue-l));border-radius:10px;transition:width .4s ease}
+
+/* ── SECTIONS ── */
+.sections{flex:1;padding:0 20px}
+.sec{display:none;animation:sfade .2s ease}
+.sec.on{display:block}
+@keyframes sfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.sec-hd{padding:24px 0 6px}
+.sec-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--blue);margin-bottom:6px}
+.sec-title{font-size:22px;font-weight:900;letter-spacing:-.4px;line-height:1.2}
+.sec-sub{font-size:13px;color:var(--t2);margin-top:5px;line-height:1.5}
+
+/* ── FORM ELEMENTS ── */
+.q{margin-top:22px}
+.q-lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--t2);margin-bottom:8px}
+.q-hint{font-size:11px;color:var(--t3);margin-bottom:8px;font-style:italic}
+
+.f-inp{
+  width:100%;background:var(--s1);border:1.5px solid var(--s3);
+  border-radius:var(--r-md);padding:14px 16px;
+  color:var(--text);font-size:16px;font-weight:600;
+  -webkit-appearance:none;transition:border-color .15s;
+}
+.f-inp:focus{border-color:var(--blue)}
+.f-inp::placeholder{color:var(--t3);font-weight:400}
+textarea.f-inp{resize:none;line-height:1.5;font-size:14px;font-weight:400;min-height:90px}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+
+.f-lbl-sm{font-size:11px;color:var(--t2);margin-bottom:4px;font-weight:600}
+
+/* CHIPS (multi/single select) */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  padding:9px 16px;border-radius:20px;border:1.5px solid var(--s3);
+  background:transparent;color:var(--t2);font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .15s;text-align:center;
+}
+.chip.on{background:var(--blue-d);border-color:var(--blue);color:var(--blue-l)}
+.chip.lg{padding:12px 18px;font-size:14px}
+
+/* RADIO CARDS */
+.radio-grid{display:flex;flex-direction:column;gap:8px}
+.radio-card{
+  background:var(--s1);border:1.5px solid var(--s3);border-radius:var(--r-md);
+  padding:14px 16px;cursor:pointer;transition:all .15s;
+  display:flex;align-items:flex-start;gap:12px;
+}
+.radio-card.on{background:var(--blue-d);border-color:var(--blue)}
+.rc-dot{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--t3);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.radio-card.on .rc-dot{background:var(--blue);border-color:var(--blue)}
+.rc-dot::after{content:'';width:7px;height:7px;border-radius:50%;background:#fff;display:none}
+.radio-card.on .rc-dot::after{display:block}
+.rc-text{}
+.rc-main{font-size:14px;font-weight:700;color:var(--text)}
+.rc-sub{font-size:11px;color:var(--t2);margin-top:2px;line-height:1.4}
+
+/* SCALE */
+.scale{display:flex;gap:6px;justify-content:space-between}
+.scale-btn{flex:1;padding:10px 4px;border-radius:10px;border:1.5px solid var(--s3);background:transparent;color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center}
+.scale-btn.on{background:var(--blue-d);border-color:var(--blue);color:var(--blue-l)}
+.scale-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:4px;padding:0 2px}
+
+/* ── NAV BUTTONS ── */
+.nav-wrap{padding:24px 20px 0;display:flex;gap:10px}
+.btn-back{
+  background:var(--s1);border:1.5px solid var(--s3);border-radius:var(--r-md);
+  padding:15px 24px;color:var(--t2);font-size:15px;font-weight:700;cursor:pointer;
+}
+.btn-next{
+  flex:1;background:var(--blue);border:none;border-radius:var(--r-md);
+  padding:15px 24px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;
+}
+
+/* ── RESULTS ── */
+.result-hero{
+  background:linear-gradient(135deg,rgba(79,142,247,.15),rgba(79,142,247,.05));
+  border:1px solid rgba(79,142,247,.2);border-radius:var(--r-lg);
+  padding:24px;margin-top:20px;text-align:center;
+}
+.result-check{width:52px;height:52px;background:rgba(52,211,153,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.result-check svg{width:26px;height:26px;stroke:var(--green);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.result-title{font-size:22px;font-weight:900;letter-spacing:-.3px}
+.result-sub{font-size:13px;color:var(--t2);margin-top:6px;line-height:1.5}
+.smart-flags{margin-top:18px;text-align:left}
+.flag{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.flag:last-child{border-bottom:none}
+.flag-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:5px}
+.flag-text{font-size:12px;color:var(--text);line-height:1.4}
+.flag-text strong{color:var(--blue-l)}
+
+.profile-box{
+  background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:16px;margin-top:16px;
+}
+.profile-box-hd{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t2);margin-bottom:10px}
+.profile-text{
+  font-size:12px;color:var(--t2);line-height:1.7;
+  white-space:pre-wrap;word-break:break-word;font-family:monospace;
+  max-height:260px;overflow-y:auto;
+}
+.copy-btn{
+  width:100%;padding:16px;background:var(--green);color:#070c18;
+  border:none;border-radius:var(--r-md);font-size:15px;font-weight:800;
+  cursor:pointer;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.copy-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.copy-btn.copied{background:var(--blue)}
+.copy-note{font-size:12px;color:var(--t2);text-align:center;margin-top:10px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="top-bar">
+    <div class="logo">Blue<span>print</span></div>
+    <div class="logo-sub">Client Intake — Confidential</div>
+  </div>
+
+  <div class="prog-wrap">
+    <div class="prog-labels">
+      <span id="progLabel">Step 1 of 6</span>
+      <span id="progPct">0%</span>
+    </div>
+    <div class="prog-track"><div class="prog-bar" id="progBar" style="width:0%"></div></div>
+  </div>
+
+  <div class="sections">
+
+    <!-- ══ SECTION 1: ABOUT YOU ══ -->
+    <div class="sec on" id="s1">
+      <div class="sec-hd">
+        <div class="sec-num">Section 1 of 6</div>
+        <div class="sec-title">Let's start with the basics.</div>
+        <div class="sec-sub">This stays between you and your coach. Be honest — it only makes your program better.</div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Your first name</div>
+        <input type="text" class="f-inp" id="q_name" placeholder="e.g. Jake" autocomplete="given-name">
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Age</div>
+        <input type="number" class="f-inp" id="q_age" placeholder="e.g. 22" inputmode="numeric" style="max-width:120px">
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Height</div>
+        <div class="two-col">
+          <div>
+            <div class="f-lbl-sm">Feet</div>
+            <input type="number" class="f-inp" id="q_ft" placeholder="5" inputmode="numeric">
+          </div>
+          <div>
+            <div class="f-lbl-sm">Inches</div>
+            <input type="number" class="f-inp" id="q_in" placeholder="10" inputmode="numeric">
+          </div>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Current weight (lbs)</div>
+        <input type="number" class="f-inp" id="q_wt" placeholder="e.g. 185" inputmode="decimal" style="max-width:150px">
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Goal weight (lbs) — best estimate is fine</div>
+        <input type="number" class="f-inp" id="q_gwt" placeholder="e.g. 170" inputmode="decimal" style="max-width:150px">
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Body fat % — leave blank if you don't know</div>
+        <input type="number" class="f-inp" id="q_bf" placeholder="e.g. 20" inputmode="decimal" style="max-width:150px">
+      </div>
+    </div>
+
+    <!-- ══ SECTION 2: GOALS ══ -->
+    <div class="sec" id="s2">
+      <div class="sec-hd">
+        <div class="sec-num">Section 2 of 6</div>
+        <div class="sec-title">What are you trying to accomplish?</div>
+        <div class="sec-sub">Select everything that applies — most people have more than one goal.</div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Select all your goals</div>
+        <div class="chips" id="q_goals">
+          <button class="chip lg" data-val="Lose body fat">Lose body fat</button>
+          <button class="chip lg" data-val="Build muscle">Build muscle</button>
+          <button class="chip lg" data-val="Get stronger">Get stronger</button>
+          <button class="chip lg" data-val="More energy daily">More energy</button>
+          <button class="chip lg" data-val="Improve athletic performance">Athletic performance</button>
+          <button class="chip lg" data-val="Better health / bloodwork">Better health</button>
+          <button class="chip lg" data-val="Look better">Look better</button>
+          <button class="chip lg" data-val="Build healthy habits">Build habits</button>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">What's your #1 reason for doing this? <span style="color:var(--t3);font-weight:400;font-size:11px">(in your own words)</span></div>
+        <div class="q-hint">This is the most important question. Be real with yourself.</div>
+        <textarea class="f-inp" id="q_why" placeholder="e.g. I want to feel confident at the beach this summer. I've been saying I'll do it for 3 years and I'm done making excuses."></textarea>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">How committed are you right now? (1 = just curious · 10 = all in)</div>
+        <div class="scale" id="q_commit">
+          <button class="scale-btn" data-val="1">1</button>
+          <button class="scale-btn" data-val="2">2</button>
+          <button class="scale-btn" data-val="3">3</button>
+          <button class="scale-btn" data-val="4">4</button>
+          <button class="scale-btn" data-val="5">5</button>
+          <button class="scale-btn" data-val="6">6</button>
+          <button class="scale-btn" data-val="7">7</button>
+          <button class="scale-btn" data-val="8">8</button>
+          <button class="scale-btn" data-val="9">9</button>
+          <button class="scale-btn" data-val="10">10</button>
+        </div>
+        <div class="scale-labels"><span>Just curious</span><span>All in</span></div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">What's your realistic timeline?</div>
+        <div class="radio-grid" id="q_timeline">
+          <div class="radio-card" data-val="ASAP — I want to see changes within a month">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">ASAP</div><div class="rc-sub">I want visible changes within a month</div></div>
+          </div>
+          <div class="radio-card" data-val="3 months">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">3 months</div><div class="rc-sub">I'm patient but I want to see real progress</div></div>
+          </div>
+          <div class="radio-card" data-val="6 months">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">6 months</div><div class="rc-sub">Building a real long-term transformation</div></div>
+          </div>
+          <div class="radio-card" data-val="1 year or more — lifestyle change">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">1 year+</div><div class="rc-sub">This is a lifestyle change, not a quick fix</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SECTION 3: TRAINING ══ -->
+    <div class="sec" id="s3">
+      <div class="sec-hd">
+        <div class="sec-num">Section 3 of 6</div>
+        <div class="sec-title">Your training background.</div>
+        <div class="sec-sub">Your program is built around where you actually are — not where you wish you were.</div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">How long have you been training consistently?</div>
+        <div class="radio-grid" id="q_exp">
+          <div class="radio-card" data-val="Never trained or just getting started">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">Beginner</div><div class="rc-sub">Never trained or just getting started</div></div>
+          </div>
+          <div class="radio-card" data-val="Less than 1 year">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">Under 1 year</div><div class="rc-sub">Have been at it but still learning</div></div>
+          </div>
+          <div class="radio-card" data-val="1–3 years">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">1–3 years</div><div class="rc-sub">Intermediate — know the basics</div></div>
+          </div>
+          <div class="radio-card" data-val="3+ years">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">3+ years</div><div class="rc-sub">Advanced — trained seriously for years</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Days per week you can train</div>
+        <div class="chips" id="q_days">
+          <button class="chip" data-val="2">2</button>
+          <button class="chip" data-val="3">3</button>
+          <button class="chip" data-val="4">4</button>
+          <button class="chip" data-val="5">5</button>
+          <button class="chip" data-val="6">6</button>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">How long can you spend per session?</div>
+        <div class="chips" id="q_duration">
+          <button class="chip" data-val="30–40 min">30–40 min</button>
+          <button class="chip" data-val="45–60 min">45–60 min</button>
+          <button class="chip" data-val="60–75 min">60–75 min</button>
+          <button class="chip" data-val="90+ min">90+ min</button>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">What equipment do you have access to?</div>
+        <div class="chips" id="q_equipment">
+          <button class="chip" data-val="Full commercial gym">Full gym</button>
+          <button class="chip" data-val="Dumbbells only">Dumbbells</button>
+          <button class="chip" data-val="Barbell + plates">Barbell</button>
+          <button class="chip" data-val="Cable machines">Cables</button>
+          <button class="chip" data-val="Bodyweight only">Bodyweight</button>
+          <button class="chip" data-val="Home gym (mixed)">Home gym</button>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Any injuries or movements to avoid?</div>
+        <div class="chips" id="q_injuries">
+          <button class="chip" data-val="None">None</button>
+          <button class="chip" data-val="Lower back issues">Lower back</button>
+          <button class="chip" data-val="Knee pain">Knees</button>
+          <button class="chip" data-val="Shoulder issues">Shoulders</button>
+          <button class="chip" data-val="Wrist / elbow">Wrists / elbows</button>
+          <button class="chip" data-val="Hip issues">Hips</button>
+        </div>
+        <textarea class="f-inp" id="q_injuries_detail" placeholder="Any details about injuries, surgeries, or things to be careful with..." style="margin-top:10px;min-height:70px"></textarea>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">What style of training do you prefer?</div>
+        <div class="chips" id="q_style">
+          <button class="chip" data-val="Heavy lifting (low reps)">Heavy lifting</button>
+          <button class="chip" data-val="Higher reps / pump">Higher reps</button>
+          <button class="chip" data-val="Mix of strength and hypertrophy">Mix of both</button>
+          <button class="chip" data-val="HIIT / circuit training">HIIT / circuits</button>
+          <button class="chip" data-val="Running / cardio focused">Running</button>
+          <button class="chip" data-val="No preference — tell me what works">No preference</button>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Best lifts / personal records — leave blank if unsure</div>
+        <div class="three-col">
+          <div>
+            <div class="f-lbl-sm">Bench (lbs)</div>
+            <input type="number" class="f-inp" id="q_bench" placeholder="—" inputmode="numeric">
+          </div>
+          <div>
+            <div class="f-lbl-sm">Squat (lbs)</div>
+            <input type="number" class="f-inp" id="q_squat" placeholder="—" inputmode="numeric">
+          </div>
+          <div>
+            <div class="f-lbl-sm">Deadlift (lbs)</div>
+            <input type="number" class="f-inp" id="q_dead" placeholder="—" inputmode="numeric">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SECTION 4: NUTRITION ══ -->
+    <div class="sec" id="s4">
+      <div class="sec-hd">
+        <div class="sec-num">Section 4 of 6</div>
+        <div class="sec-title">Let's talk about food.</div>
+        <div class="sec-sub">No judgment. Your meal plan is built around what you'll actually eat.</div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">How do you currently eat?</div>
+        <div class="radio-grid" id="q_diet_type">
+          <div class="radio-card" data-val="No tracking — I eat whatever">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">No tracking</div><div class="rc-sub">I eat whatever I want with no real system</div></div>
+          </div>
+          <div class="radio-card" data-val="Mindful eating — I'm aware but don't track">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">Mindful eating</div><div class="rc-sub">I'm aware of what I eat but don't track numbers</div></div>
+          </div>
+          <div class="radio-card" data-val="Loose tracking — I eyeball portions">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">Loose tracking</div><div class="rc-sub">I roughly estimate portions and calories</div></div>
+          </div>
+          <div class="radio-card" data-val="Strict macro tracking — I weigh food">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">Strict tracking</div><div class="rc-sub">I weigh food and hit specific macro targets</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Dietary restrictions or preferences</div>
+        <div class="chips" id="q_restrictions">
+          <button class="chip" data-val="None">None</button>
+          <button class="chip" data-val="Vegetarian">Vegetarian</button>
+          <button class="chip" data-val="Vegan">Vegan</button>
+          <button class="chip" data-val="No dairy">No dairy</button>
+          <button class="chip" data-val="No gluten">No gluten</button>
+          <button class="chip" data-val="Halal">Halal</button>
+          <button class="chip" data-val="Kosher">Kosher</button>
+          <button class="chip" data-val="Low carb / keto">Low carb</button>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Foods you hate or won't eat</div>
+        <input type="text" class="f-inp" id="q_dislikes" placeholder="e.g. fish, mushrooms, cottage cheese">
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">How many meals do you typically eat per day?</div>
+        <div class="chips" id="q_meals">
+          <button class="chip" data-val="2 meals">2</button>
+          <button class="chip" data-val="3 meals">3</button>
+          <button class="chip" data-val="4 meals">4</button>
+          <button class="chip" data-val="5–6 meals">5–6</button>
+          <button class="chip" data-val="Intermittent fasting">IF / fasting</button>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">What's your biggest nutrition challenge?</div>
+        <div class="radio-grid" id="q_nut_challenge">
+          <div class="radio-card" data-val="I don't know what to eat or how much">
+            <div class="rc-dot"></div><div class="rc-text"><div class="rc-main">I don't know what to eat</div></div>
+          </div>
+          <div class="radio-card" data-val="I struggle to track calories and macros consistently">
+            <div class="rc-dot"></div><div class="rc-text"><div class="rc-main">Hard to track consistently</div></div>
+          </div>
+          <div class="radio-card" data-val="I overeat or binge — especially at night or on weekends">
+            <div class="rc-dot"></div><div class="rc-text"><div class="rc-main">Overeating / bingeing</div></div>
+          </div>
+          <div class="radio-card" data-val="I eat out too much and don't know the macros">
+            <div class="rc-dot"></div><div class="rc-text"><div class="rc-main">I eat out a lot</div></div>
+          </div>
+          <div class="radio-card" data-val="I skip meals and undereat during the day">
+            <div class="rc-dot"></div><div class="rc-text"><div class="rc-main">I skip meals / undereat</div></div>
+          </div>
+          <div class="radio-card" data-val="No real challenge — nutrition is not an issue for me">
+            <div class="rc-dot"></div><div class="rc-text"><div class="rc-main">No major challenge</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SECTION 5: LIFESTYLE ══ -->
+    <div class="sec" id="s5">
+      <div class="sec-hd">
+        <div class="sec-num">Section 5 of 6</div>
+        <div class="sec-title">Your life outside the gym.</div>
+        <div class="sec-sub">Your schedule, stress, and sleep are just as important as your workouts.</div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Your daily schedule</div>
+        <div class="two-col">
+          <div>
+            <div class="f-lbl-sm">Wake up time</div>
+            <input type="time" class="f-inp" id="q_wake" value="06:00">
+          </div>
+          <div>
+            <div class="f-lbl-sm">Bedtime</div>
+            <input type="time" class="f-inp" id="q_bed" value="22:00">
+          </div>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">What type of job or daily life do you have?</div>
+        <div class="radio-grid" id="q_job">
+          <div class="radio-card" data-val="Desk job — sedentary all day">
+            <div class="rc-dot"></div><div class="rc-text"><div class="rc-main">Desk job / student</div><div class="rc-sub">Sitting most of the day</div></div>
+          </div>
+          <div class="radio-card" data-val="On my feet but not physically demanding">
+            <div class="rc-dot"></div><div class="rc-text"><div class="rc-main">On my feet</div><div class="rc-sub">Standing, walking around — not intense</div></div>
+          </div>
+          <div class="radio-card" data-val="Physically demanding job">
+            <div class="rc-dot"></div><div class="rc-text"><div class="rc-main">Physically demanding</div><div class="rc-sub">Labor, construction, sports, etc.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">How are your stress levels day-to-day?</div>
+        <div class="chips" id="q_stress">
+          <button class="chip" data-val="Low — pretty relaxed">Low</button>
+          <button class="chip" data-val="Medium — manageable">Medium</button>
+          <button class="chip" data-val="High — often stressed">High</button>
+          <button class="chip" data-val="Very high — constantly overwhelmed">Very high</button>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">How is your sleep?</div>
+        <div class="chips" id="q_sleep">
+          <button class="chip" data-val="Great — 8+ hours, feel rested">Great (8+ hrs)</button>
+          <button class="chip" data-val="Good — 7–8 hours">Good (7–8 hrs)</button>
+          <button class="chip" data-val="Okay — 6–7 hours">Okay (6–7 hrs)</button>
+          <button class="chip" data-val="Poor — under 6 hours or low quality">Poor (&lt;6 hrs)</button>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">What has worked for you in the past?</div>
+        <div class="q-hint">Even small things count — a certain type of food, a workout you loved, a time of day that felt right.</div>
+        <textarea class="f-inp" id="q_worked" placeholder="e.g. I lost 15 lbs two years ago by cutting out soda and walking every day. I felt my best when I was going to the gym first thing in the morning."></textarea>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">What has stopped you from reaching your goals before?</div>
+        <div class="q-hint">Be completely honest. This directly shapes how your program is built.</div>
+        <textarea class="f-inp" id="q_obstacles" placeholder="e.g. I always start strong but lose motivation after 2–3 weeks. I also struggle to stay on track on weekends when I'm out with friends."></textarea>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">What would make this the easiest to stick to?</div>
+        <textarea class="f-inp" id="q_easy" placeholder="e.g. I need reminders. If the plan is too complicated I'll give up. I want to see progress tracked so I know it's working."></textarea>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Anything else — medical conditions, medications, or context your coach should know?</div>
+        <textarea class="f-inp" id="q_other" placeholder="Optional — leave blank if nothing to add."></textarea>
+      </div>
+    </div>
+
+    <!-- ══ SECTION 6: YOUR PROFILE ══ -->
+    <div class="sec" id="s6">
+      <div class="sec-hd">
+        <div class="sec-num">Section 6 of 6</div>
+        <div class="sec-title">Your Blueprint is ready.</div>
+        <div class="sec-sub">Copy the profile below and send it to your coach. They'll build your personalized program from this.</div>
+      </div>
+
+      <div class="result-hero">
+        <div class="result-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="result-title" id="resultName">Done.</div>
+        <div class="result-sub">Your answers have been turned into a smart coaching profile. Your coach will use this to build your app.</div>
+        <div class="smart-flags" id="smartFlags"></div>
+      </div>
+
+      <div class="profile-box">
+        <div class="profile-box-hd">Your Client Profile — Copy &amp; Send to Coach</div>
+        <div class="profile-text" id="profileText"></div>
+      </div>
+
+      <button class="copy-btn" id="copyBtn" onclick="copyProfile()">
+        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy Profile to Clipboard
+      </button>
+      <div class="copy-note" id="copyNote">Copy this and text it to your coach — they'll take it from there.</div>
+    </div>
+
+  </div><!-- /sections -->
+
+  <div class="nav-wrap" id="navWrap">
+    <button class="btn-back" id="backBtn" onclick="prevSec()" style="display:none">Back</button>
+    <button class="btn-next" id="nextBtn" onclick="nextSec()">Continue →</button>
+  </div>
+
+</div><!-- /shell -->
+
+<script>
+let cur = 1;
+const TOTAL = 6;
+
+// ── MULTI CHIP (toggle each) ───────────────────
+document.querySelectorAll('.chips').forEach(wrap=>{
+  wrap.querySelectorAll('.chip').forEach(c=>{
+    c.onclick=()=>c.classList.toggle('on');
+  });
+});
+
+// ── SINGLE CHIP (select one) ──────────────────
+['q_days','q_duration','q_stress','q_sleep','q_meals'].forEach(id=>{
+  const w=document.getElementById(id);
+  if(!w)return;
+  w.querySelectorAll('.chip').forEach(c=>{
+    c.onclick=()=>{w.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');};
+  });
+});
+
+// ── RADIO CARDS (select one) ──────────────────
+document.querySelectorAll('.radio-grid').forEach(grid=>{
+  grid.querySelectorAll('.radio-card').forEach(card=>{
+    card.onclick=()=>{grid.querySelectorAll('.radio-card').forEach(x=>x.classList.remove('on'));card.classList.add('on');};
+  });
+});
+
+// ── SCALE (select one) ────────────────────────
+document.querySelectorAll('.scale').forEach(sc=>{
+  sc.querySelectorAll('.scale-btn').forEach(b=>{
+    b.onclick=()=>{sc.querySelectorAll('.scale-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');};
+  });
+});
+
+// ── EQUIPMENT (multi keep as multi) ──────────
+// already handled above as multi chip
+
+function getChipVals(id){
+  const w=document.getElementById(id);
+  if(!w)return'';
+  return Array.from(w.querySelectorAll('.chip.on')).map(c=>c.dataset.val).join(', ')||'Not specified';
+}
+function getRadioVal(id){
+  const w=document.getElementById(id);
+  if(!w)return'';
+  const on=w.querySelector('.radio-card.on');
+  return on?on.dataset.val:'Not specified';
+}
+function getSingleChip(id){
+  const w=document.getElementById(id);
+  if(!w)return'';
+  const on=w.querySelector('.chip.on');
+  return on?on.dataset.val:'Not specified';
+}
+function getScaleVal(id){
+  const w=document.getElementById(id);
+  if(!w)return'';
+  const on=w.querySelector('.scale-btn.on');
+  return on?on.dataset.val:'Not specified';
+}
+function inp(id){const el=document.getElementById(id);return el?el.value.trim():''}
+
+function updateProgress(){
+  const pct=Math.round(((cur-1)/TOTAL)*100);
+  document.getElementById('progBar').style.width=pct+'%';
+  document.getElementById('progLabel').textContent=`Step ${cur} of ${TOTAL}`;
+  document.getElementById('progPct').textContent=pct+'%';
+  document.getElementById('backBtn').style.display=cur>1?'block':'none';
+  document.getElementById('nextBtn').textContent=cur===TOTAL-1?'Build My Profile →':'Continue →';
+  document.getElementById('nextBtn').style.display=cur===TOTAL?'none':'block';
+}
+
+function showSec(n){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s'+n).classList.add('on');
+  document.querySelector('.shell').scrollTo?document.querySelector('.shell').scrollTo(0,0):window.scrollTo(0,0);
+}
+
+function nextSec(){
+  if(cur<TOTAL-1){cur++;showSec(cur);updateProgress();}
+  else if(cur===TOTAL-1){buildProfile();cur=TOTAL;showSec(TOTAL);updateProgress();}
+}
+
+function prevSec(){
+  if(cur>1){cur--;showSec(cur);updateProgress();}
+}
+
+// ── SMART FLAG DETECTION ──────────────────────
+function detectFlags(a){
+  const blob=(a.nut_challenge+' '+a.obstacles+' '+a.easy+' '+a.worked).toLowerCase();
+  const flags=[];
+  if(/track|log|forget|remind|calori|count|record/.test(blob)){
+    flags.push({icon:'🔔',label:'Meal reminders enabled',desc:'Will add timed notifications to log food each day'});
+  }
+  if(/motivat|consist|give up|quit|lose interest|stop after|fall off|streak|habit/.test(blob)){
+    flags.push({icon:'🔥',label:'Streak tracker made prominent',desc:'Daily streak counter front and center to build consistency'});
+  }
+  if(/time|busy|schedule|quick|short|rush|can.t spend/.test(blob)){
+    flags.push({icon:'⚡',label:'Efficient workout format',desc:'Program optimized for your time constraints'});
+  }
+  if(/complicated|complex|confus|simple|easy to follow|overwhelm/.test(blob)){
+    flags.push({icon:'✅',label:'Simplified interface',desc:'Cleaner layout, less complexity — easier to stay on track'});
+  }
+  if(/eat out|restaurant|fast food|don.t know macros/.test(blob)){
+    flags.push({icon:'🍽',label:'Restaurant-friendly meal logging',desc:'Quick-add common restaurant meals with pre-filled macros'});
+  }
+  if(/night|evening|binge|late|weekend/.test(blob)){
+    flags.push({icon:'🌙',label:'Evening accountability nudge',desc:'Nightly check-in reminder to log dinner and review the day'});
+  }
+  if(a.sleep&&/poor|under 6/.test(a.sleep)){
+    flags.push({icon:'💤',label:'Sleep optimization protocol added',desc:'Specific supplement timing and wind-down schedule for sleep quality'});
+  }
+  if(a.stress&&/high/.test(a.stress)){
+    flags.push({icon:'🧠',label:'Cortisol management stack included',desc:'Ashwagandha, Magnesium, and Zone 2 cardio protocol for stress'});
+  }
+  if(!flags.length){
+    flags.push({icon:'✓',label:'Standard Blueprint program',desc:'Full program with all features enabled based on your profile'});
+  }
+  return flags;
+}
+
+// ── BUILD PROFILE ─────────────────────────────
+function buildProfile(){
+  const a={
+    name:inp('q_name')||'Client',
+    age:inp('q_age'),
+    ft:inp('q_ft'),
+    inc:inp('q_in'),
+    wt:inp('q_wt'),
+    gwt:inp('q_gwt'),
+    bf:inp('q_bf'),
+    goals:getChipVals('q_goals'),
+    why:inp('q_why'),
+    commit:getScaleVal('q_commit'),
+    timeline:getRadioVal('q_timeline'),
+    exp:getRadioVal('q_exp'),
+    days:getSingleChip('q_days'),
+    duration:getSingleChip('q_duration'),
+    equipment:getChipVals('q_equipment'),
+    injuries:getChipVals('q_injuries'),
+    injuries_detail:inp('q_injuries_detail'),
+    style:getChipVals('q_style'),
+    bench:inp('q_bench'),
+    squat:inp('q_squat'),
+    dead:inp('q_dead'),
+    diet_type:getRadioVal('q_diet_type'),
+    restrictions:getChipVals('q_restrictions'),
+    dislikes:inp('q_dislikes'),
+    meals:getSingleChip('q_meals'),
+    nut_challenge:getRadioVal('q_nut_challenge'),
+    wake:inp('q_wake'),
+    bed:inp('q_bed'),
+    job:getRadioVal('q_job'),
+    stress:getSingleChip('q_stress'),
+    sleep:getSingleChip('q_sleep'),
+    worked:inp('q_worked'),
+    obstacles:inp('q_obstacles'),
+    easy:inp('q_easy'),
+    other:inp('q_other'),
+  };
+
+  const ht=a.ft&&a.inc?`${a.ft}'${a.inc}"`:(a.ft?`${a.ft}' tall`:'Not provided');
+  const prs=[a.bench&&`Bench: ${a.bench} lbs`,a.squat&&`Squat: ${a.squat} lbs`,a.dead&&`Deadlift: ${a.dead} lbs`].filter(Boolean).join(' · ')||'Not provided';
+  const flags=detectFlags(a);
+
+  const flagLines=flags.map(f=>`  ${f.icon} ${f.label}: ${f.desc}`).join('\n');
+
+  const profile=`=== BLUEPRINT CLIENT PROFILE ===
+Generated: ${new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}
+
+CLIENT: ${a.name}
+AGE: ${a.age||'—'} | HEIGHT: ${ht} | WEIGHT: ${a.wt||'—'} lbs | GOAL WEIGHT: ${a.gwt||'—'} lbs${a.bf?` | BODY FAT: ${a.bf}%`:''}
+
+━━━ GOALS ━━━━━━━━━━━━━━━━━━━━━━━━━━
+Goals: ${a.goals}
+Timeline: ${a.timeline}
+Commitment: ${a.commit}/10
+Motivation: "${a.why||'Not provided'}"
+
+━━━ TRAINING ━━━━━━━━━━━━━━━━━━━━━━━
+Experience: ${a.exp}
+Schedule: ${a.days} days/week · ${a.duration}/session
+Equipment: ${a.equipment}
+Style: ${a.style}
+Personal Records: ${prs}
+Injuries / Avoid: ${a.injuries}${a.injuries_detail?`\n  Details: ${a.injuries_detail}`:''}
+
+━━━ NUTRITION ━━━━━━━━━━━━━━━━━━━━━━
+Current approach: ${a.diet_type}
+Restrictions: ${a.restrictions}
+Dislikes: ${a.dislikes||'None'}
+Meals/day: ${a.meals}
+Main challenge: ${a.nut_challenge}
+
+━━━ LIFESTYLE ━━━━━━━━━━━━━━━━━━━━━━
+Wake: ${a.wake||'—'} | Bed: ${a.bed||'—'}
+Job: ${a.job}
+Stress: ${a.stress} | Sleep: ${a.sleep}
+
+━━━ HISTORY ━━━━━━━━━━━━━━━━━━━━━━━━
+What's worked before:
+  "${a.worked||'Not provided'}"
+
+What stopped me:
+  "${a.obstacles||'Not provided'}"
+
+What would make it stick:
+  "${a.easy||'Not provided'}"
+${a.other?`\nAdditional context:\n  "${a.other}"`:''}
+
+━━━ SMART FEATURES DETECTED ━━━━━━━
+${flagLines}
+
+─────────────────────────────────────
+Build ${a.name}'s personalized Blueprint program.
+─────────────────────────────────────`;
+
+  document.getElementById('resultName').textContent=`${a.name}, you're done.`;
+  document.getElementById('profileText').textContent=profile;
+  window._bpProfile=profile;
+
+  const flagHtml=flags.map(f=>`<div class="flag"><div class="flag-dot"></div><div class="flag-text"><strong>${f.label}</strong> — ${f.desc}</div></div>`).join('');
+  document.getElementById('smartFlags').innerHTML=flagHtml;
+}
+
+function copyProfile(){
+  const text=window._bpProfile||document.getElementById('profileText').textContent;
+  const btn=document.getElementById('copyBtn');
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>{
+      btn.textContent='Copied!';btn.classList.add('copied');
+      document.getElementById('copyNote').textContent='Now text this to your coach. They\'ll build your program from it.';
+      setTimeout(()=>{btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Profile to Clipboard`;btn.classList.remove('copied');},3000);
+    });
+  } else {
+    const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    btn.textContent='Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2v1"/></svg> Copy Profile to Clipboard`;btn.classList.remove('copied');},3000);
+  }
+}
+
+updateProgress();
+</script>
+</body>
+</html>
