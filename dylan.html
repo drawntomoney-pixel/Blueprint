@@ -251,20 +251,8 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 .sg-ai::placeholder{color:var(--t3)}
 .sg-save-btn{background:var(--blue);color:#fff;border:none;border-radius:var(--r-sm);padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0}
 .sg-item-custom .sg-dot{background:rgba(79,142,247,.5)}
-.sg-cdel{background:transparent;border:none;color:var(--t3);cursor:pointer;padding:2px 4px;font-size:15px;line-height:1;flex-shrink:0}
-/* ACCOUNTABILITY */
-.acct-card{background:linear-gradient(135deg,rgba(52,211,153,.07),rgba(52,211,153,.02));border:1px solid rgba(52,211,153,.2);border-radius:var(--r-lg);padding:18px;margin-bottom:12px}
-.acct-hd{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:4px}
-.acct-title{font-size:15px;font-weight:800;margin-bottom:8px}
-.acct-row{display:flex;gap:8px;margin-bottom:8px}
-.acct-inp{flex:1;background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.15);border-radius:var(--r-sm);padding:10px 12px;color:var(--text);font-size:13px;min-width:0;transition:border-color .15s}
-.acct-inp:focus{border-color:var(--green);outline:none}
-.acct-inp::placeholder{color:var(--t3)}
-.acct-note{font-size:11px;color:var(--t2);line-height:1.5;margin-bottom:12px}
-.acct-alert{padding:12px 14px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);border-radius:var(--r-sm);margin-bottom:10px;font-size:12px;color:var(--red);line-height:1.5;display:none}
-.acct-alert.show{display:block}
-.acct-send{width:100%;padding:13px;background:var(--green);color:#070c18;border:none;border-radius:var(--r-md);font-size:14px;font-weight:800;cursor:pointer;display:none}
-.acct-send.show{display:block}
+.sg-cdel{width:22px;height:22px;border-radius:50%;background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.3);color:var(--red);cursor:pointer;font-size:14px;font-weight:700;line-height:1;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.sg-cdel:active{background:rgba(248,113,113,.35)}
 /* FOOD AUTOCOMPLETE */
 .food-suggest{position:absolute;top:calc(100% + 2px);left:0;right:0;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);z-index:200;max-height:230px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 .food-opt{padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
@@ -292,20 +280,20 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 .fb{display:flex;justify-content:space-between;align-items:center}
 .blue{color:var(--blue)}.green{color:var(--green)}.muted{color:var(--t2)}.bold{font-weight:700}
 
-/* HEATMAP */
-.hmap-outer{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
-.hmap-inner{display:flex;gap:3px;min-width:max-content}
-.hmap-daycol{display:flex;flex-direction:column;gap:3px}
-.hmap-mlbl{font-size:9px;color:var(--t2);height:14px;line-height:14px;overflow:hidden;white-space:nowrap}
-.hmap-cell{width:12px;height:12px;border-radius:3px;background:rgba(255,255,255,.05)}
-.hmap-cell.lvl0{background:rgba(255,255,255,.05)}
-.hmap-cell.lvl1{background:rgba(79,142,247,.25)}
-.hmap-cell.lvl2{background:rgba(79,142,247,.58)}
-.hmap-cell.lvl3{background:var(--blue)}
-.hmap-cell.lbl-cell{background:transparent;display:flex;align-items:center}
-.hmap-cell.lbl-cell span{font-size:8px;color:var(--t2);line-height:1;width:8px}
-.hmap-foot{font-size:11px;color:var(--t2);margin-top:10px}
-.hmap-legend{display:flex;align-items:center;gap:3px;margin-top:8px;justify-content:flex-end}
+/* ACTIVITY GRID */
+.wg-labels{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:7px}
+.wg-labels span{text-align:center;font-size:10px;font-weight:700;color:var(--t2);letter-spacing:.2px}
+.wg-rows{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.wg-cell{aspect-ratio:1;border-radius:7px;background:rgba(255,255,255,.05);transition:transform .1s}
+.wg-cell.lvl0{background:rgba(255,255,255,.05)}
+.wg-cell.lvl1{background:rgba(79,142,247,.22)}
+.wg-cell.lvl2{background:rgba(79,142,247,.55)}
+.wg-cell.lvl3{background:var(--blue)}
+.wg-cell.tod{box-shadow:0 0 0 2px var(--blue),0 0 0 4px var(--bg)}
+.wg-cell.future{opacity:.1}
+.wg-week-lbl{font-size:10px;color:var(--t3);text-align:center;margin-top:6px;font-weight:600}
+.hmap-foot{font-size:11px;color:var(--t2);margin-top:12px}
+.hmap-legend{display:flex;align-items:center;gap:4px;margin-top:8px;justify-content:flex-end}
 .hmap-legend-lbl{font-size:9px;color:var(--t2)}
 /* MILESTONES */
 .milestone-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -356,7 +344,6 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
         <div class="water-lbl" id="waterLbl"></div>
       </div>
       <div id="eveningSection"></div>
-      <div id="acctCard"></div>
       <div class="card">
         <div class="card-hd">Supplement Schedule <span id="suppEditToggle" style="font-size:10px;color:var(--blue);cursor:pointer;font-weight:600;letter-spacing:0;text-transform:none;margin-left:8px" onclick="toggleSuppEdit()">+ Customize</span></div>
         <div id="suppList"></div>
@@ -425,15 +412,18 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
         <div class="pr-grid" id="prGrid"></div>
       </div>
       <div class="card">
-        <div class="card-hd">Activity — Last 90 Days</div>
-        <div class="hmap-outer"><div class="hmap-inner" id="hmapGrid"></div></div>
+        <div class="card-hd">Activity — Last 4 Weeks</div>
+        <div class="wg-labels">
+          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+        <div class="wg-rows" id="hmapGrid"></div>
         <div class="hmap-foot" id="hmapFoot"></div>
         <div class="hmap-legend">
           <span class="hmap-legend-lbl">Less</span>
-          <div class="hmap-cell lvl0"></div>
-          <div class="hmap-cell lvl1"></div>
-          <div class="hmap-cell lvl2"></div>
-          <div class="hmap-cell lvl3"></div>
+          <div class="wg-cell" style="width:12px;height:12px;aspect-ratio:unset"></div>
+          <div class="wg-cell lvl1" style="width:12px;height:12px;aspect-ratio:unset"></div>
+          <div class="wg-cell lvl2" style="width:12px;height:12px;aspect-ratio:unset"></div>
+          <div class="wg-cell lvl3" style="width:12px;height:12px;aspect-ratio:unset"></div>
           <span class="hmap-legend-lbl">More</span>
         </div>
       </div>
@@ -832,7 +822,7 @@ function renderToday(){
     <div class="stat-pill"><div class="stat-pill-val">${(s.water||{})[key]||0}</div><div class="stat-pill-lbl">Cups Water</div></div>
     <div class="stat-pill"><div class="stat-pill-val">${suppDone}/${SUPPS.length}</div><div class="stat-pill-lbl">Supp Groups</div></div>`;
 
-  renderMacroBars();renderWater();renderEvening();renderAcct();renderSupps();renderSched();
+  renderMacroBars();renderWater();renderEvening();renderSupps();renderSched();
 }
 
 function renderMacroBars(){
@@ -1251,8 +1241,11 @@ function renderHeatmap(){
   const el=document.getElementById('hmapGrid');if(!el)return;
   const s=gs();
   const today=new Date();today.setHours(0,0,0,0);
-  const start=new Date(today);start.setDate(start.getDate()-89);
-  const dow=start.getDay();start.setDate(start.getDate()-(dow===0?6:dow-1));
+  // Start from Monday of 4 weeks ago
+  const start=new Date(today);
+  const dow=today.getDay(); // 0=Sun,1=Mon...
+  start.setDate(today.getDate()-(dow===0?6:dow-1)); // back to this Monday
+  start.setDate(start.getDate()-21); // 3 more weeks = 4 total
   function actLevel(date){
     const key=dk(date);
     const hasSW=Object.values((s.supps||{})[key]||{}).some(Boolean)||(s.water||{})[key]>0;
@@ -1263,31 +1256,20 @@ function renderHeatmap(){
     if(hasSW)return 1;
     return 0;
   }
-  const dates=[];const d=new Date(start);
-  while(d<=today){dates.push(new Date(d));d.setDate(d.getDate()+1);}
-  const weeks=[];for(let i=0;i<dates.length;i+=7)weeks.push(dates.slice(i,i+7));
-  const dayLabels=['M','T','W','T','F','S','S'];
-  let html='<div class="hmap-daycol" style="margin-right:4px">';
-  html+='<div class="hmap-mlbl"></div>';
-  dayLabels.forEach((l,i)=>html+=`<div class="hmap-cell lbl-cell"><span>${[0,2,4].includes(i)?l:''}</span></div>`);
-  html+='</div>';
-  let prevMon=-1;
-  weeks.forEach(week=>{
-    const mon=week[0].getMonth();
-    const mLabel=mon!==prevMon?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mon]:'';
-    prevMon=mon;
-    html+=`<div class="hmap-daycol"><div class="hmap-mlbl">${mLabel}</div>`;
-    for(let r=0;r<7;r++){
-      const cell=week[r];
-      if(!cell||cell>today)html+='<div class="hmap-cell" style="opacity:.08"></div>';
-      else html+=`<div class="hmap-cell lvl${actLevel(cell)}"></div>`;
-    }
-    html+='</div>';
-  });
+  let html='';let active=0;
+  const d=new Date(start);
+  const MTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  for(let i=0;i<28;i++){
+    const future=d>today,isToday=dk(d)===dk(today);
+    const lvl=future?0:actLevel(d);
+    if(!future&&lvl>0)active++;
+    const label=d.getDate()===1||i===0?MTHS[d.getMonth()]+' '+d.getDate():String(d.getDate());
+    html+=`<div class="wg-cell lvl${lvl}${future?' future':''}${isToday?' tod':''}" title="${label}"></div>`;
+    d.setDate(d.getDate()+1);
+  }
   el.innerHTML=html;
-  const activeDays=dates.filter(x=>x<=today&&actLevel(x)>0).length;
   const foot=document.getElementById('hmapFoot');
-  if(foot)foot.textContent=`${activeDays} active day${activeDays!==1?'s':''} in the last 90 days`;
+  if(foot)foot.textContent=`${active} active day${active!==1?'s':''} in the last 4 weeks`;
 }
 
 // ── MILESTONES ────────────────────────────────────────────
@@ -1333,40 +1315,7 @@ function renderMilestones(){
 }
 function saveNotes(val){const s=gs();s.notes=val;saveDebounced(s);}
 
-// ── ACCOUNTABILITY ────────────────────────────────────────
-function renderAcct(){
-  const el=document.getElementById('acctCard');if(!el)return;
-  const s=gs(),acct=s.acct||{};
-  const h=new Date().getHours(),key=dk();
-  const ev=(s.evening||{})[key]||{};
-  const allEvDone=[ev.ev0,ev.ev1,ev.ev2].every(Boolean);
-  // Show send button after 8 PM if evening goals not completed and a partner is set
-  const showAlert=h>=20&&!allEvDone&&acct.name&&acct.phone;
-  el.innerHTML=`
-    <div class="acct-card">
-      <div class="acct-hd">Accountability</div>
-      <div class="acct-title">Who's holding you to it?</div>
-      <div class="acct-row">
-        <input class="acct-inp" id="acctName" placeholder="Friend's name" value="${acct.name||''}" oninput="saveAcct('name',this.value)">
-        <input class="acct-inp" id="acctPhone" placeholder="Their number" inputmode="tel" value="${acct.phone||''}" oninput="saveAcct('phone',this.value)" style="max-width:150px">
-      </div>
-      <div class="acct-note">If you miss your evening goals, a tap sends them a text. No hiding.</div>
-      ${showAlert?`<div class="acct-alert show">⚠️ It's past 8 PM — evening goals aren't done yet. Send ${acct.name} a check-in?</div>`:''}
-      ${showAlert?`<button class="acct-send show" onclick="sendAcctText()">📲 Text ${acct.name}</button>`:''}
-      ${!acct.name&&!acct.phone?`<div style="font-size:11px;color:var(--t3)">Add a name and number above to activate accountability texts.</div>`:''}
-    </div>`;
-}
-function saveAcct(field,val){
-  const s=gs();if(!s.acct)s.acct={};s.acct[field]=val;saveDebounced(s);
-}
-function sendAcctText(){
-  const s=gs(),acct=s.acct||{};
-  const name=acct.name||'Dylan';
-  const phone=(acct.phone||'').replace(/\D/g,'');
-  if(!phone)return alert('Add your accountability partner\'s number first.');
-  const body=encodeURIComponent(`Hey! Dylan missed his evening Blueprint goals tonight. Give him a push — he needs to hold the line. 💪`);
-  window.location.href=`sms:+1${phone}?body=${body}`;
-}
+
 
 // ── INIT ─────────────────────────────────────────────────
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
