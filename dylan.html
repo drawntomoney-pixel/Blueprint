@@ -231,6 +231,13 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 .pr-inp::placeholder{color:var(--t3);font-weight:400;font-size:12px}
 .days-to-goal{margin-top:14px;padding:12px 14px;background:rgba(251,191,36,.07);border-radius:var(--r-sm);border-left:2px solid var(--orange);font-size:12px;color:var(--orange);line-height:1.5}
 
+/* FOOD AUTOCOMPLETE */
+.food-suggest{position:absolute;top:calc(100% + 2px);left:0;right:0;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);z-index:200;max-height:230px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.food-opt{padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.food-opt:last-child{border-bottom:none}
+.food-opt:active,.food-opt:hover{background:var(--s3)}
+.food-opt-name{font-size:13px;font-weight:700}
+.food-opt-macros{font-size:11px;color:var(--t2);margin-top:2px}
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(7,12,24,.85);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:flex-end;justify-content:center}
 .modal{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg) var(--r-lg) 0 0;width:100%;max-width:480px;padding:20px 20px calc(20px + env(safe-area-inset-bottom));max-height:85vh;overflow-y:auto}
@@ -426,7 +433,13 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 <div id="mealModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeMealModal()">
   <div class="modal">
     <div class="modal-hd"><span>Log a Meal</span><button onclick="closeMealModal()">×</button></div>
-    <div class="form-group"><div class="form-lbl">What did you eat?</div><input id="mealNameInp" type="text" class="form-inp" placeholder="e.g. Chipotle chicken bowl"></div>
+    <div class="form-group"><div class="form-lbl">What did you eat?</div>
+      <div style="position:relative">
+        <input id="mealNameInp" type="text" class="form-inp" placeholder="e.g. chicken breast 6 oz" oninput="onFoodSearch(this.value)" autocomplete="off">
+        <div id="foodSuggest" class="food-suggest" style="display:none"></div>
+      </div>
+      <div style="font-size:11px;color:var(--t2);margin-top:5px">Type a food name — macros fill in automatically.</div>
+    </div>
     <div class="form-row">
       <div class="form-group"><div class="form-lbl">Calories</div><input id="mealCalInp" type="number" inputmode="numeric" class="form-inp" placeholder="0"></div>
       <div class="form-group"><div class="form-lbl">Protein (g)</div><input id="mealProInp" type="number" inputmode="numeric" class="form-inp" placeholder="0"></div>
@@ -542,18 +555,92 @@ const MEALS=[
   {id:'m3',t:'6:30 PM',n:'Dinner',d:'6oz chicken, turkey, or lean beef, 1 cup rice, side salad with olive oil',cal:700,pro:55,carb:75,fat:22},
 ];
 
+const FOOD_DB=[
+  // ── Proteins ───────────────────────────────
+  {n:'Chicken Breast (4 oz)',     cal:124,pro:26,carb:0, fat:1},
+  {n:'Chicken Breast (6 oz)',     cal:186,pro:39,carb:0, fat:2},
+  {n:'Chicken Breast (8 oz)',     cal:248,pro:52,carb:0, fat:3},
+  {n:'Ground Beef 90/10 (4 oz)', cal:196,pro:22,carb:0, fat:11},
+  {n:'Ground Turkey 93% (4 oz)', cal:170,pro:22,carb:0, fat:8},
+  {n:'Sirloin Steak (6 oz)',      cal:270,pro:44,carb:0, fat:8},
+  {n:'Salmon (6 oz)',             cal:311,pro:44,carb:0, fat:14},
+  {n:'Shrimp (4 oz)',             cal:112,pro:22,carb:1, fat:1},
+  {n:'Tuna (5 oz can)',           cal:130,pro:30,carb:0, fat:1},
+  {n:'Turkey Breast (4 oz)',      cal:135,pro:25,carb:0, fat:3},
+  {n:'Eggs (1 large)',            cal:78, pro:6, carb:1, fat:5},
+  {n:'Eggs (2 large)',            cal:156,pro:12,carb:1, fat:10},
+  {n:'Eggs (3 large)',            cal:234,pro:18,carb:2, fat:15},
+  {n:'Egg Whites (4)',            cal:68, pro:14,carb:1, fat:0},
+  {n:'Eggs + Egg Whites (2+4)',   cal:224,pro:26,carb:2, fat:10},
+  {n:'Greek Yogurt Plain (1 cup)',cal:130,pro:23,carb:8, fat:0},
+  {n:'Cottage Cheese (1 cup)',    cal:206,pro:28,carb:8, fat:5},
+  {n:'Whey Protein (1 scoop)',    cal:120,pro:25,carb:3, fat:2},
+  {n:'Protein Shake w/ Milk',     cal:270,pro:33,carb:20,fat:8},
+  // ── Carbs ──────────────────────────────────
+  {n:'White Rice (1 cup cooked)', cal:206,pro:4, carb:45,fat:0},
+  {n:'White Rice (1.5 cups)',     cal:309,pro:6, carb:68,fat:0},
+  {n:'Brown Rice (1 cup cooked)', cal:218,pro:5, carb:46,fat:2},
+  {n:'Oats (1/2 cup dry)',        cal:150,pro:5, carb:27,fat:3},
+  {n:'Oats (1 cup dry)',          cal:300,pro:10,carb:54,fat:5},
+  {n:'Oats (1.5 cups dry)',       cal:450,pro:15,carb:81,fat:8},
+  {n:'Sweet Potato (medium)',     cal:103,pro:2, carb:24,fat:0},
+  {n:'Potato (medium baked)',     cal:168,pro:4, carb:38,fat:0},
+  {n:'Pasta (2 oz dry)',          cal:200,pro:7, carb:41,fat:1},
+  {n:'Bread (1 slice)',           cal:79, pro:3, carb:15,fat:1},
+  {n:'Bagel (plain)',             cal:270,pro:11,carb:53,fat:2},
+  {n:'Banana',                    cal:105,pro:1, carb:27,fat:0},
+  {n:'Apple',                     cal:95, pro:1, carb:25,fat:0},
+  {n:'Orange',                    cal:62, pro:1, carb:15,fat:0},
+  // ── Veggies / Sides ────────────────────────
+  {n:'Broccoli (1 cup)',          cal:55, pro:4, carb:11,fat:1},
+  {n:'Mixed Vegetables (1 cup)',  cal:80, pro:4, carb:16,fat:1},
+  {n:'Side Salad w/ Olive Oil',   cal:120,pro:2, carb:8, fat:9},
+  {n:'Milk (1 cup)',              cal:149,pro:8, carb:12,fat:8},
+  // ── Fats / Misc ────────────────────────────
+  {n:'Peanut Butter (2 tbsp)',    cal:188,pro:8, carb:6, fat:16},
+  {n:'Almonds (1 oz)',            cal:164,pro:6, carb:6, fat:14},
+  {n:'Avocado (half)',            cal:120,pro:1, carb:6, fat:11},
+  {n:'Olive Oil (1 tbsp)',        cal:119,pro:0, carb:0, fat:14},
+  {n:'Cheese (1 oz slice)',       cal:113,pro:7, carb:0, fat:9},
+  // ── Fast Food & Restaurants ────────────────
+  {n:'Chipotle Bowl (chicken)',   cal:665,pro:51,carb:70,fat:17},
+  {n:'Chipotle Bowl (steak)',     cal:700,pro:48,carb:70,fat:20},
+  {n:'Chipotle Burrito (chicken)',cal:910,pro:55,carb:91,fat:27},
+  {n:'McDonald\'s Big Mac',       cal:550,pro:25,carb:46,fat:30},
+  {n:'McDonald\'s McDouble',      cal:400,pro:22,carb:33,fat:19},
+  {n:'McDonald\'s 10pc Nuggets',  cal:420,pro:24,carb:26,fat:25},
+  {n:'Subway 6" Turkey',          cal:280,pro:18,carb:40,fat:4},
+  {n:'Subway 6" Chicken',         cal:320,pro:23,carb:41,fat:6},
+  {n:'Subway Footlong Turkey',    cal:560,pro:36,carb:80,fat:8},
+  {n:'Chick-fil-A Sandwich',      cal:470,pro:28,carb:42,fat:18},
+  {n:'Pizza (1 slice cheese)',    cal:285,pro:12,carb:36,fat:10},
+  {n:'Pizza (2 slices cheese)',   cal:570,pro:24,carb:72,fat:20},
+  {n:'Taco Bell Burrito Supreme', cal:390,pro:17,carb:51,fat:13},
+  {n:'Wendy\'s Dave\'s Single',   cal:590,pro:30,carb:40,fat:34},
+  // ── Snacks & Drinks ────────────────────────
+  {n:'Protein Bar (Quest)',       cal:190,pro:21,carb:21,fat:8},
+  {n:'Protein Bar (RXBAR)',       cal:210,pro:12,carb:24,fat:9},
+  {n:'Rice Cakes (2)',            cal:70, pro:1, carb:15,fat:0},
+  {n:'Orange Juice (1 cup)',      cal:112,pro:2, carb:26,fat:1},
+  {n:'Gatorade (20 oz)',          cal:130,pro:0, carb:34,fat:0},
+  {n:'Monster Energy (16 oz)',    cal:210,pro:2, carb:54,fat:0},
+  {n:'Coffee Black',              cal:5,  pro:0, carb:1, fat:0},
+];
+
 const SCHED=[
-  {t:'5:45',h:5, d:'Wake up — pre-workout + coffee, head to gym'},
-  {t:'6:00',h:6, d:'Gym — done before your day even starts'},
-  {t:'7:00',h:7, d:'Post-workout breakfast — biggest and most important meal'},
-  {t:'7:15',h:7, d:'Vitamin D3, Omega-3, Vitamin C with food'},
-  {t:'12:00',h:12,d:'Lunch — hit it hard. Protein and carbs power the back half of your day.'},
-  {t:'15:00',h:15,d:'Afternoon — stay hydrated, keep moving when you can'},
-  {t:'18:30',h:18,d:'Dinner — keep it light. Kitchen closes at 7 PM. Hold the line.'},
-  {t:'20:30',h:20,d:'Evening check-in — review your day, log if you haven\'t'},
-  {t:'21:00',h:21,d:'Magnesium + Zinc before bed'},
-  {t:'21:30',h:21,d:'Wind down — screens off, lights dim'},
-  {t:'21:45',h:21,d:'Sleep — 7–8 hours. Your body rebuilds here.'},
+  {t:'5:15 AM',h:5, d:'Wake up — alarm goes off. Get up, don\'t snooze.'},
+  {t:'5:30 AM',h:5, d:'Pre-workout + coffee — take it while you get ready'},
+  {t:'5:45 AM',h:5, d:'Drive to gym'},
+  {t:'6:00 AM',h:6, d:'Gym — done before your day even starts'},
+  {t:'7:00 AM',h:7, d:'Post-workout breakfast — biggest meal of the day'},
+  {t:'7:15 AM',h:7, d:'Vitamin D3, Omega-3, Vitamin C with food'},
+  {t:'12:00 PM',h:12,d:'Lunch — hit it hard. Protein and carbs power the back half of your day.'},
+  {t:'3:00 PM', h:15,d:'Afternoon — stay hydrated, keep moving when you can'},
+  {t:'6:30 PM', h:18,d:'Dinner — keep it light. Kitchen closes at 7 PM. Hold the line.'},
+  {t:'8:30 PM', h:20,d:'Evening check-in — review your day, log if you haven\'t'},
+  {t:'9:00 PM', h:21,d:'Magnesium + Zinc before bed'},
+  {t:'9:30 PM', h:21,d:'Wind down — screens off, lights dim'},
+  {t:'9:45 PM', h:21,d:'Sleep — 7–8 hours. Your body rebuilds here.'},
 ];
 
 const PRS_DEFAULT=[
@@ -941,10 +1028,14 @@ function togMeal(id){
 }
 function showMealModal(){
   ['mealNameInp','mealCalInp','mealProInp','mealCarbInp','mealFatInp'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('foodSuggest').style.display='none';
   document.getElementById('mealModal').style.display='flex';
   setTimeout(()=>document.getElementById('mealNameInp').focus(),100);
 }
-function closeMealModal(){document.getElementById('mealModal').style.display='none';}
+function closeMealModal(){
+  document.getElementById('foodSuggest').style.display='none';
+  document.getElementById('mealModal').style.display='none';
+}
 function saveMeal(){
   const name=document.getElementById('mealNameInp').value.trim()||'Meal';
   const cal=parseInt(document.getElementById('mealCalInp').value)||0;
@@ -957,6 +1048,39 @@ function saveMeal(){
 function deleteMeal(i){
   const s=gs(),key=dk();if(s.customMeals&&s.customMeals[key])s.customMeals[key].splice(i,1);
   ss(s);renderEat();renderMacroBars();
+}
+
+// ── FOOD AUTOCOMPLETE ────────────────────────────────────
+let _foodMatches=[];
+function onFoodSearch(q){
+  const sug=document.getElementById('foodSuggest');
+  if(!q||q.length<2){sug.style.display='none';return;}
+  const ql=q.toLowerCase().trim();
+  const words=ql.split(/\s+/).filter(w=>w.length>1&&!/^\d+(oz|g|cup|tbsp|tsp|slice|scoop)?$/.test(w));
+  if(!words.length){sug.style.display='none';return;}
+  _foodMatches=FOOD_DB.filter(f=>{
+    const fl=f.n.toLowerCase();
+    return words.some(w=>fl.includes(w));
+  }).sort((a,b)=>{
+    const al=a.n.toLowerCase(),bl=b.n.toLowerCase();
+    return words.filter(w=>bl.includes(w)).length-words.filter(w=>al.includes(w)).length;
+  }).slice(0,7);
+  if(!_foodMatches.length){sug.style.display='none';return;}
+  sug.innerHTML=_foodMatches.map((f,i)=>`
+    <div class="food-opt" onclick="pickFood(${i})">
+      <div class="food-opt-name">${f.n}</div>
+      <div class="food-opt-macros">${f.cal} cal · ${f.pro}g protein · ${f.carb}g carbs · ${f.fat}g fat</div>
+    </div>`).join('');
+  sug.style.display='block';
+}
+function pickFood(i){
+  const f=_foodMatches[i];if(!f)return;
+  document.getElementById('mealNameInp').value=f.n;
+  document.getElementById('mealCalInp').value=f.cal;
+  document.getElementById('mealProInp').value=f.pro;
+  document.getElementById('mealCarbInp').value=f.carb;
+  document.getElementById('mealFatInp').value=f.fat;
+  document.getElementById('foodSuggest').style.display='none';
 }
 
 // ── PROGRESS ─────────────────────────────────────────────
