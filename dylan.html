@@ -588,75 +588,189 @@ const MEAL_SLOTS=[
 ];
 
 const FOOD_DB=[
-  // ── Proteins ───────────────────────────────
-  {n:'Chicken Breast (4 oz)',     cal:124,pro:26,carb:0, fat:1},
-  {n:'Chicken Breast (6 oz)',     cal:186,pro:39,carb:0, fat:2},
-  {n:'Chicken Breast (8 oz)',     cal:248,pro:52,carb:0, fat:3},
-  {n:'Ground Beef 90/10 (4 oz)', cal:196,pro:22,carb:0, fat:11},
-  {n:'Ground Turkey 93% (4 oz)', cal:170,pro:22,carb:0, fat:8},
-  {n:'Sirloin Steak (6 oz)',      cal:270,pro:44,carb:0, fat:8},
-  {n:'Salmon (6 oz)',             cal:311,pro:44,carb:0, fat:14},
-  {n:'Shrimp (4 oz)',             cal:112,pro:22,carb:1, fat:1},
-  {n:'Tuna (5 oz can)',           cal:130,pro:30,carb:0, fat:1},
-  {n:'Turkey Breast (4 oz)',      cal:135,pro:25,carb:0, fat:3},
-  {n:'Eggs (1 large)',            cal:78, pro:6, carb:1, fat:5},
-  {n:'Eggs (2 large)',            cal:156,pro:12,carb:1, fat:10},
-  {n:'Eggs (3 large)',            cal:234,pro:18,carb:2, fat:15},
-  {n:'Egg Whites (4)',            cal:68, pro:14,carb:1, fat:0},
-  {n:'Eggs + Egg Whites (2+4)',   cal:224,pro:26,carb:2, fat:10},
-  {n:'Greek Yogurt Plain (1 cup)',cal:130,pro:23,carb:8, fat:0},
-  {n:'Cottage Cheese (1 cup)',    cal:206,pro:28,carb:8, fat:5},
-  {n:'Whey Protein (1 scoop)',    cal:120,pro:25,carb:3, fat:2},
-  {n:'Protein Shake w/ Milk',     cal:270,pro:33,carb:20,fat:8},
-  // ── Carbs ──────────────────────────────────
-  {n:'White Rice (1 cup cooked)', cal:206,pro:4, carb:45,fat:0},
-  {n:'White Rice (1.5 cups)',     cal:309,pro:6, carb:68,fat:0},
-  {n:'Brown Rice (1 cup cooked)', cal:218,pro:5, carb:46,fat:2},
-  {n:'Oats (1/2 cup dry)',        cal:150,pro:5, carb:27,fat:3},
-  {n:'Oats (1 cup dry)',          cal:300,pro:10,carb:54,fat:5},
-  {n:'Oats (1.5 cups dry)',       cal:450,pro:15,carb:81,fat:8},
-  {n:'Sweet Potato (medium)',     cal:103,pro:2, carb:24,fat:0},
-  {n:'Potato (medium baked)',     cal:168,pro:4, carb:38,fat:0},
-  {n:'Pasta (2 oz dry)',          cal:200,pro:7, carb:41,fat:1},
-  {n:'Bread (1 slice)',           cal:79, pro:3, carb:15,fat:1},
-  {n:'Bagel (plain)',             cal:270,pro:11,carb:53,fat:2},
-  {n:'Banana',                    cal:105,pro:1, carb:27,fat:0},
-  {n:'Apple',                     cal:95, pro:1, carb:25,fat:0},
-  {n:'Orange',                    cal:62, pro:1, carb:15,fat:0},
-  // ── Veggies / Sides ────────────────────────
-  {n:'Broccoli (1 cup)',          cal:55, pro:4, carb:11,fat:1},
-  {n:'Mixed Vegetables (1 cup)',  cal:80, pro:4, carb:16,fat:1},
-  {n:'Side Salad w/ Olive Oil',   cal:120,pro:2, carb:8, fat:9},
-  {n:'Milk (1 cup)',              cal:149,pro:8, carb:12,fat:8},
-  // ── Fats / Misc ────────────────────────────
-  {n:'Peanut Butter (2 tbsp)',    cal:188,pro:8, carb:6, fat:16},
-  {n:'Almonds (1 oz)',            cal:164,pro:6, carb:6, fat:14},
-  {n:'Avocado (half)',            cal:120,pro:1, carb:6, fat:11},
-  {n:'Olive Oil (1 tbsp)',        cal:119,pro:0, carb:0, fat:14},
-  {n:'Cheese (1 oz slice)',       cal:113,pro:7, carb:0, fat:9},
-  // ── Fast Food & Restaurants ────────────────
-  {n:'Chipotle Bowl (chicken)',   cal:665,pro:51,carb:70,fat:17},
-  {n:'Chipotle Bowl (steak)',     cal:700,pro:48,carb:70,fat:20},
-  {n:'Chipotle Burrito (chicken)',cal:910,pro:55,carb:91,fat:27},
-  {n:'McDonald\'s Big Mac',       cal:550,pro:25,carb:46,fat:30},
-  {n:'McDonald\'s McDouble',      cal:400,pro:22,carb:33,fat:19},
-  {n:'McDonald\'s 10pc Nuggets',  cal:420,pro:24,carb:26,fat:25},
-  {n:'Subway 6" Turkey',          cal:280,pro:18,carb:40,fat:4},
-  {n:'Subway 6" Chicken',         cal:320,pro:23,carb:41,fat:6},
-  {n:'Subway Footlong Turkey',    cal:560,pro:36,carb:80,fat:8},
-  {n:'Chick-fil-A Sandwich',      cal:470,pro:28,carb:42,fat:18},
-  {n:'Pizza (1 slice cheese)',    cal:285,pro:12,carb:36,fat:10},
-  {n:'Pizza (2 slices cheese)',   cal:570,pro:24,carb:72,fat:20},
-  {n:'Taco Bell Burrito Supreme', cal:390,pro:17,carb:51,fat:13},
-  {n:'Wendy\'s Dave\'s Single',   cal:590,pro:30,carb:40,fat:34},
-  // ── Snacks & Drinks ────────────────────────
-  {n:'Protein Bar (Quest)',       cal:190,pro:21,carb:21,fat:8},
-  {n:'Protein Bar (RXBAR)',       cal:210,pro:12,carb:24,fat:9},
-  {n:'Rice Cakes (2)',            cal:70, pro:1, carb:15,fat:0},
-  {n:'Orange Juice (1 cup)',      cal:112,pro:2, carb:26,fat:1},
-  {n:'Gatorade (20 oz)',          cal:130,pro:0, carb:34,fat:0},
-  {n:'Monster Energy (16 oz)',    cal:210,pro:2, carb:54,fat:0},
-  {n:'Coffee Black',              cal:5,  pro:0, carb:1, fat:0},
+  // ── Proteins ───────────────────────────────────────────
+  {n:'Chicken Breast (4 oz)',          cal:124,pro:26,carb:0, fat:1},
+  {n:'Chicken Breast (6 oz)',          cal:186,pro:39,carb:0, fat:2},
+  {n:'Chicken Breast (8 oz)',          cal:248,pro:52,carb:0, fat:3},
+  {n:'Chicken Thigh (4 oz)',           cal:209,pro:24,carb:0, fat:12},
+  {n:'Rotisserie Chicken (4 oz)',      cal:190,pro:28,carb:0, fat:9},
+  {n:'Canned Chicken (5 oz)',          cal:175,pro:38,carb:0, fat:2},
+  {n:'Ground Beef 90/10 (4 oz)',       cal:196,pro:22,carb:0, fat:11},
+  {n:'Ground Beef 80/20 (4 oz)',       cal:287,pro:19,carb:0, fat:23},
+  {n:'Ground Turkey 93% (4 oz)',       cal:170,pro:22,carb:0, fat:8},
+  {n:'Turkey Burger (4 oz)',           cal:172,pro:22,carb:0, fat:9},
+  {n:'Sirloin Steak (6 oz)',           cal:270,pro:44,carb:0, fat:8},
+  {n:'Ribeye Steak (6 oz)',            cal:450,pro:38,carb:0, fat:32},
+  {n:'Pork Tenderloin (4 oz)',         cal:136,pro:24,carb:0, fat:3},
+  {n:'Salmon (6 oz)',                  cal:311,pro:44,carb:0, fat:14},
+  {n:'Tilapia (6 oz)',                 cal:165,pro:35,carb:0, fat:3},
+  {n:'Cod (6 oz)',                     cal:139,pro:30,carb:0, fat:1},
+  {n:'Shrimp (4 oz)',                  cal:112,pro:22,carb:1, fat:1},
+  {n:'Tuna (5 oz can)',                cal:130,pro:30,carb:0, fat:1},
+  {n:'Turkey Breast (4 oz)',           cal:135,pro:25,carb:0, fat:3},
+  {n:'Deli Turkey (2 oz)',             cal:56, pro:11,carb:1, fat:1},
+  {n:'Deli Ham (2 oz)',                cal:61, pro:9, carb:2, fat:2},
+  {n:'Pepperoni (1 oz)',               cal:141,pro:5, carb:1, fat:13},
+  {n:'Eggs (1 large)',                 cal:78, pro:6, carb:1, fat:5},
+  {n:'Eggs (2 large)',                 cal:156,pro:12,carb:1, fat:10},
+  {n:'Eggs (3 large)',                 cal:234,pro:18,carb:2, fat:15},
+  {n:'Egg Whites (4)',                 cal:68, pro:14,carb:1, fat:0},
+  {n:'Hard Boiled Egg (1)',            cal:78, pro:6, carb:1, fat:5},
+  {n:'Eggs + Egg Whites (2+4)',        cal:224,pro:26,carb:2, fat:10},
+  {n:'Scrambled Eggs (3)',             cal:260,pro:18,carb:3, fat:19},
+  {n:'Greek Yogurt Plain (1 cup)',     cal:130,pro:23,carb:8, fat:0},
+  {n:'Greek Yogurt (5.3 oz cup)',      cal:80, pro:15,carb:6, fat:0},
+  {n:'Cottage Cheese (1 cup)',         cal:206,pro:28,carb:8, fat:5},
+  {n:'Cottage Cheese (1/2 cup)',       cal:103,pro:14,carb:4, fat:2},
+  {n:'Whey Protein (1 scoop)',         cal:120,pro:25,carb:3, fat:2},
+  {n:'Protein Shake w/ Milk',          cal:270,pro:33,carb:20,fat:8},
+  {n:'Premier Protein Shake',          cal:160,pro:30,carb:5, fat:3},
+  {n:'Fairlife Protein Shake',         cal:150,pro:30,carb:6, fat:2},
+  {n:'Muscle Milk (11 oz)',            cal:160,pro:25,carb:9, fat:4},
+  // ── Carbs & Grains ─────────────────────────────────────
+  {n:'White Rice (1 cup cooked)',      cal:206,pro:4, carb:45,fat:0},
+  {n:'White Rice (1.5 cups)',          cal:309,pro:6, carb:68,fat:0},
+  {n:'Brown Rice (1 cup cooked)',      cal:218,pro:5, carb:46,fat:2},
+  {n:'Oats (1/2 cup dry)',             cal:150,pro:5, carb:27,fat:3},
+  {n:'Oats (1 cup dry)',               cal:300,pro:10,carb:54,fat:5},
+  {n:'Overnight Oats (1 cup)',         cal:350,pro:14,carb:58,fat:7},
+  {n:'Quinoa (1 cup cooked)',          cal:222,pro:8, carb:39,fat:4},
+  {n:'Pasta (2 oz dry)',               cal:200,pro:7, carb:41,fat:1},
+  {n:'Pasta (1 cup cooked)',           cal:220,pro:8, carb:43,fat:1},
+  {n:'Mac & Cheese (1 cup)',           cal:350,pro:10,carb:54,fat:10},
+  {n:'Ramen Noodles (1 pkg)',          cal:371,pro:8, carb:50,fat:15},
+  {n:'Sweet Potato (medium)',          cal:103,pro:2, carb:24,fat:0},
+  {n:'Potato (medium baked)',          cal:168,pro:4, carb:38,fat:0},
+  {n:'French Fries (medium)',          cal:365,pro:4, carb:48,fat:17},
+  {n:'Bread (1 slice white)',          cal:79, pro:3, carb:15,fat:1},
+  {n:'Bread (1 slice whole wheat)',    cal:69, pro:4, carb:12,fat:1},
+  {n:'Bagel (plain)',                  cal:270,pro:11,carb:53,fat:2},
+  {n:'English Muffin',                 cal:134,pro:4, carb:26,fat:1},
+  {n:'Pita Bread (1)',                 cal:165,pro:5, carb:34,fat:1},
+  {n:'Flour Tortilla (8 inch)',        cal:146,pro:4, carb:26,fat:3},
+  {n:'Corn Tortilla (6 inch)',         cal:52, pro:1, carb:11,fat:1},
+  {n:'Pancakes (2 medium)',            cal:175,pro:5, carb:31,fat:4},
+  {n:'Waffles (2)',                    cal:218,pro:6, carb:25,fat:11},
+  {n:'French Toast (2 slices)',        cal:290,pro:10,carb:40,fat:10},
+  {n:'Cereal (1 cup)',                 cal:160,pro:3, carb:38,fat:2},
+  {n:'Corn',                           cal:132,pro:5, carb:29,fat:2},
+  // ── Fruits ─────────────────────────────────────────────
+  {n:'Banana',                         cal:105,pro:1, carb:27,fat:0},
+  {n:'Apple (medium)',                 cal:95, pro:0, carb:25,fat:0},
+  {n:'Orange (medium)',                cal:62, pro:1, carb:15,fat:0},
+  {n:'Blueberries (1 cup)',            cal:84, pro:1, carb:21,fat:0},
+  {n:'Strawberries (1 cup)',           cal:49, pro:1, carb:12,fat:0},
+  {n:'Grapes (1 cup)',                 cal:104,pro:1, carb:27,fat:0},
+  {n:'Mango (1 cup)',                  cal:99, pro:1, carb:25,fat:1},
+  {n:'Pineapple (1 cup)',              cal:83, pro:1, carb:22,fat:0},
+  {n:'Watermelon (2 cups)',            cal:86, pro:2, carb:22,fat:0},
+  {n:'Peach (medium)',                 cal:59, pro:1, carb:14,fat:0},
+  {n:'Raspberries (1 cup)',            cal:64, pro:1, carb:15,fat:1},
+  // ── Vegetables ─────────────────────────────────────────
+  {n:'Broccoli (1 cup)',               cal:55, pro:4, carb:11,fat:1},
+  {n:'Spinach (1 cup raw)',            cal:7,  pro:1, carb:1, fat:0},
+  {n:'Kale (1 cup)',                   cal:33, pro:3, carb:6, fat:0},
+  {n:'Cucumber (medium)',              cal:24, pro:1, carb:6, fat:0},
+  {n:'Carrots (medium)',               cal:25, pro:1, carb:6, fat:0},
+  {n:'Bell Pepper (medium)',           cal:31, pro:1, carb:7, fat:0},
+  {n:'Mixed Vegetables (1 cup)',       cal:80, pro:4, carb:16,fat:1},
+  {n:'Side Salad w/ Dressing',         cal:120,pro:2, carb:8, fat:9},
+  {n:'Edamame (1 cup)',                cal:188,pro:18,carb:14,fat:8},
+  {n:'Asparagus (1 cup)',              cal:27, pro:3, carb:5, fat:0},
+  {n:'Green Beans (1 cup)',            cal:44, pro:2, carb:10,fat:0},
+  {n:'Zucchini (1 cup)',               cal:21, pro:2, carb:4, fat:0},
+  // ── Dairy & Fats ───────────────────────────────────────
+  {n:'Milk (1 cup)',                   cal:149,pro:8, carb:12,fat:8},
+  {n:'Chocolate Milk (1 cup)',         cal:208,pro:8, carb:32,fat:5},
+  {n:'Cheese (1 oz slice)',            cal:113,pro:7, carb:0, fat:9},
+  {n:'Shredded Cheese (1/4 cup)',      cal:110,pro:7, carb:1, fat:9},
+  {n:'String Cheese (1 stick)',        cal:80, pro:7, carb:1, fat:5},
+  {n:'Cream Cheese (2 tbsp)',          cal:99, pro:2, carb:2, fat:10},
+  {n:'Sour Cream (2 tbsp)',            cal:62, pro:1, carb:2, fat:6},
+  {n:'Butter (1 tbsp)',                cal:102,pro:0, carb:0, fat:12},
+  {n:'Olive Oil (1 tbsp)',             cal:119,pro:0, carb:0, fat:14},
+  {n:'Avocado (half)',                 cal:120,pro:1, carb:6, fat:11},
+  {n:'Peanut Butter (2 tbsp)',         cal:188,pro:8, carb:6, fat:16},
+  {n:'Almond Butter (2 tbsp)',         cal:196,pro:7, carb:6, fat:18},
+  {n:'Almonds (1 oz)',                 cal:164,pro:6, carb:6, fat:14},
+  {n:'Cashews (1 oz)',                 cal:157,pro:5, carb:9, fat:12},
+  {n:'Walnuts (1 oz)',                 cal:185,pro:4, carb:4, fat:18},
+  {n:'Mixed Nuts (1 oz)',              cal:173,pro:5, carb:6, fat:16},
+  {n:'Sunflower Seeds (1 oz)',         cal:165,pro:6, carb:5, fat:14},
+  {n:'Ranch Dressing (2 tbsp)',        cal:130,pro:1, carb:2, fat:13},
+  {n:'Mayo (1 tbsp)',                  cal:94, pro:0, carb:0, fat:10},
+  {n:'Honey (1 tbsp)',                 cal:64, pro:0, carb:17,fat:0},
+  {n:'Ketchup (1 tbsp)',               cal:17, pro:0, carb:4, fat:0},
+  // ── Snacks ─────────────────────────────────────────────
+  {n:'Popcorn, air-popped (3 cups)',   cal:93, pro:3, carb:19,fat:1},
+  {n:'Popcorn, microwave (3 cups)',    cal:165,pro:3, carb:17,fat:9},
+  {n:'Pretzels (1 oz)',                cal:108,pro:3, carb:23,fat:1},
+  {n:'Doritos (1 oz)',                 cal:140,pro:2, carb:18,fat:7},
+  {n:'Lays Chips (1 oz)',              cal:160,pro:2, carb:15,fat:10},
+  {n:'Goldfish Crackers (55 pieces)',  cal:140,pro:3, carb:20,fat:5},
+  {n:'Ritz Crackers (5)',              cal:79, pro:1, carb:10,fat:4},
+  {n:'Graham Crackers (2 sheets)',     cal:118,pro:2, carb:22,fat:3},
+  {n:'Rice Cakes (2)',                 cal:70, pro:1, carb:15,fat:0},
+  {n:'Trail Mix (1/4 cup)',            cal:173,pro:5, carb:16,fat:11},
+  {n:'Granola (1/2 cup)',              cal:209,pro:5, carb:44,fat:3},
+  {n:'Quaker Granola Bar',             cal:90, pro:2, carb:18,fat:2},
+  {n:'Clif Bar',                       cal:250,pro:10,carb:44,fat:5},
+  {n:'Kind Bar',                       cal:200,pro:6, carb:22,fat:13},
+  {n:'Protein Bar (Quest)',            cal:190,pro:21,carb:21,fat:8},
+  {n:'Protein Bar (RXBAR)',            cal:210,pro:12,carb:24,fat:9},
+  {n:'Beef Jerky (1 oz)',              cal:116,pro:9, carb:3, fat:7},
+  {n:'Hummus (2 tbsp)',                cal:50, pro:2, carb:4, fat:3},
+  {n:'Dark Chocolate (1 oz)',          cal:155,pro:2, carb:17,fat:9},
+  {n:'Oreos (3 cookies)',              cal:160,pro:2, carb:25,fat:7},
+  {n:'Pop-Tart (1)',                   cal:200,pro:3, carb:38,fat:5},
+  {n:'Ice Cream (1 cup)',              cal:273,pro:5, carb:31,fat:15},
+  {n:'Yogurt Parfait',                 cal:220,pro:10,carb:35,fat:4},
+  {n:'Egg & Cheese Sandwich',          cal:340,pro:18,carb:32,fat:15},
+  // ── Fast Food & Restaurants ────────────────────────────
+  {n:'Chipotle Bowl (chicken)',        cal:665,pro:51,carb:70,fat:17},
+  {n:'Chipotle Bowl (steak)',          cal:700,pro:48,carb:70,fat:20},
+  {n:'Chipotle Burrito (chicken)',     cal:910,pro:55,carb:91,fat:27},
+  {n:'Chipotle Tacos (3, chicken)',    cal:525,pro:36,carb:59,fat:16},
+  {n:'McDonald\'s Big Mac',            cal:550,pro:25,carb:46,fat:30},
+  {n:'McDonald\'s McDouble',           cal:400,pro:22,carb:33,fat:19},
+  {n:'McDonald\'s McChicken',          cal:400,pro:14,carb:41,fat:21},
+  {n:'McDonald\'s Nuggets (10pc)',     cal:420,pro:24,carb:26,fat:25},
+  {n:'McDonald\'s Fries (M)',          cal:320,pro:4, carb:44,fat:14},
+  {n:'McDonald\'s Egg McMuffin',       cal:310,pro:17,carb:30,fat:12},
+  {n:'Subway 6" Turkey',               cal:280,pro:18,carb:40,fat:4},
+  {n:'Subway 6" Chicken',              cal:320,pro:23,carb:41,fat:6},
+  {n:'Subway Footlong Turkey',         cal:560,pro:36,carb:80,fat:8},
+  {n:'Chick-fil-A Sandwich',           cal:470,pro:28,carb:42,fat:18},
+  {n:'Chick-fil-A Nuggets (8pc)',      cal:260,pro:26,carb:11,fat:12},
+  {n:'Chick-fil-A Waffle Fries (M)',   cal:420,pro:6, carb:51,fat:20},
+  {n:'Taco Bell Crunchy Taco',         cal:170,pro:8, carb:13,fat:9},
+  {n:'Taco Bell Burrito Supreme',      cal:390,pro:17,carb:51,fat:13},
+  {n:'Taco Bell Quesadilla (chicken)', cal:520,pro:28,carb:47,fat:25},
+  {n:'Wendy\'s Dave\'s Single',        cal:590,pro:30,carb:40,fat:34},
+  {n:'Wendy\'s Frosty (M)',            cal:460,pro:12,carb:78,fat:12},
+  {n:'Burger King Whopper',            cal:660,pro:28,carb:49,fat:40},
+  {n:'Pizza (1 slice cheese)',         cal:285,pro:12,carb:36,fat:10},
+  {n:'Pizza (2 slices cheese)',        cal:570,pro:24,carb:72,fat:20},
+  {n:'Panda Express Orange Chicken',  cal:490,pro:24,carb:51,fat:23},
+  {n:'Panda Express Chow Mein',        cal:490,pro:13,carb:70,fat:19},
+  {n:'Panera Bread Turkey Sandwich',  cal:570,pro:34,carb:63,fat:19},
+  {n:'Starbucks Egg White Bites (2)', cal:170,pro:13,carb:13,fat:7},
+  // ── Drinks ─────────────────────────────────────────────
+  {n:'Coffee Black',                   cal:5,  pro:0, carb:1, fat:0},
+  {n:'Coffee w/ Cream & Sugar',        cal:80, pro:1, carb:12,fat:4},
+  {n:'Starbucks Latte (16 oz)',        cal:220,pro:12,carb:18,fat:9},
+  {n:'Starbucks Frappuccino (16 oz)', cal:380,pro:5, carb:65,fat:13},
+  {n:'Starbucks Cold Brew (12 oz)',    cal:5,  pro:1, carb:0, fat:0},
+  {n:'Orange Juice (1 cup)',           cal:112,pro:2, carb:26,fat:1},
+  {n:'Apple Juice (1 cup)',            cal:114,pro:0, carb:28,fat:0},
+  {n:'Milk (1 cup)',                   cal:149,pro:8, carb:12,fat:8},
+  {n:'Chocolate Milk (1 cup)',         cal:208,pro:8, carb:32,fat:5},
+  {n:'Coca Cola (12 oz)',              cal:140,pro:0, carb:39,fat:0},
+  {n:'Diet Coke / Zero Sugar (12 oz)',cal:0,  pro:0, carb:0, fat:0},
+  {n:'Sprite (12 oz)',                 cal:140,pro:0, carb:38,fat:0},
+  {n:'Gatorade (20 oz)',               cal:130,pro:0, carb:34,fat:0},
+  {n:'Red Bull (8.4 oz)',              cal:110,pro:1, carb:28,fat:0},
+  {n:'Monster Energy (16 oz)',         cal:210,pro:2, carb:54,fat:0},
 ];
 
 const SCHED=[
@@ -1159,28 +1273,86 @@ function deleteMeal(i){
 }
 
 // ── FOOD AUTOCOMPLETE ────────────────────────────────────
-let _foodMatches=[];
-function onFoodSearch(q){
-  const sug=document.getElementById('foodSuggest');
-  if(!q||q.length<2){sug.style.display='none';return;}
-  const ql=q.toLowerCase().trim();
-  const words=ql.split(/\s+/).filter(w=>w.length>1&&!/^\d+(oz|g|cup|tbsp|tsp|slice|scoop)?$/.test(w));
-  if(!words.length){sug.style.display='none';return;}
-  _foodMatches=FOOD_DB.filter(f=>{
-    const fl=f.n.toLowerCase();
-    return words.some(w=>fl.includes(w));
-  }).sort((a,b)=>{
-    const al=a.n.toLowerCase(),bl=b.n.toLowerCase();
-    return words.filter(w=>bl.includes(w)).length-words.filter(w=>al.includes(w)).length;
-  }).slice(0,7);
+let _foodMatches=[],_apiDebounce=null;
+
+async function searchFoodAPI(q){
+  // USDA FoodData Central — free API, 1000 req/day on DEMO_KEY
+  // Get your own free key at: https://fdc.nal.usda.gov/api-key-signup.html
+  try{
+    const url=`https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(q)}&pageSize=6&api_key=DEMO_KEY&dataType=Survey%20(FNDDS),Foundation,SR%20Legacy`;
+    const r=await fetch(url,{signal:AbortSignal.timeout(4000)});
+    if(!r.ok)return[];
+    const data=await r.json();
+    return(data.foods||[]).map(f=>{
+      const nut=f.foodNutrients||[];
+      const get=name=>(nut.find(n=>n.nutrientName?.includes(name))?.value||0);
+      const s=f.servingSize||100;const m=s/100;
+      const cal=Math.round(get('Energy')*m);
+      if(!cal)return null;
+      return{
+        n:f.description.replace(/,\s*(UPC.*|GTIN.*)/i,'').trim(),
+        cal,
+        pro:Math.round(get('Protein')*m),
+        carb:Math.round(get('Carbohydrate')*m),
+        fat:Math.round(get('Total lipid')*m),
+        _api:true
+      };
+    }).filter(Boolean);
+  }catch(e){return[];}
+}
+
+function renderFoodDropdown(){
+  const sug=document.getElementById('foodSuggest');if(!sug)return;
   if(!_foodMatches.length){sug.style.display='none';return;}
   sug.innerHTML=_foodMatches.map((f,i)=>`
     <div class="food-opt" onclick="pickFood(${i})">
-      <div class="food-opt-name">${f.n}</div>
+      <div class="food-opt-name">${f.n}${f._api?'<span style="font-size:9px;color:var(--t3);margin-left:6px;font-weight:400">USDA</span>':''}</div>
       <div class="food-opt-macros">${f.cal} cal · ${f.pro}g protein · ${f.carb}g carbs · ${f.fat}g fat</div>
     </div>`).join('');
   sug.style.display='block';
 }
+
+function onFoodSearch(q){
+  const sug=document.getElementById('foodSuggest');
+  if(!q||q.length<2){sug.style.display='none';_foodMatches=[];clearTimeout(_apiDebounce);return;}
+  const ql=q.toLowerCase().trim();
+  const words=ql.split(/\s+/).filter(w=>w.length>1&&!/^\d+(oz|g|cup|tbsp|tsp|slice|scoop|pc)?$/.test(w));
+  if(!words.length){sug.style.display='none';return;}
+
+  // Instant local results
+  _foodMatches=FOOD_DB.filter(f=>{
+    const fl=f.n.toLowerCase();return words.some(w=>fl.includes(w));
+  }).sort((a,b)=>{
+    const sc=n=>words.reduce((s,w)=>s+(n.includes(w)?1:0),0);
+    return sc(b.n.toLowerCase())-sc(a.n.toLowerCase());
+  }).slice(0,7);
+  renderFoodDropdown();
+
+  // API fallback when local results are few
+  if(_foodMatches.length<4&&q.length>=3){
+    clearTimeout(_apiDebounce);
+    _apiDebounce=setTimeout(async()=>{
+      const cur=document.getElementById('mealNameInp')?.value||'';
+      if(cur.toLowerCase()!==q.toLowerCase())return; // user moved on
+      // Show loading hint
+      const sug2=document.getElementById('foodSuggest');
+      if(sug2&&sug2.style.display==='block'&&!document.getElementById('_foodLoad')){
+        const ld=document.createElement('div');ld.className='food-opt';ld.id='_foodLoad';
+        ld.innerHTML='<div class="food-opt-name" style="color:var(--t2);font-size:12px">🔍 Searching more foods...</div>';
+        sug2.appendChild(ld);
+      }
+      const api=await searchFoodAPI(q);
+      document.getElementById('_foodLoad')?.remove();
+      if(api.length){
+        const existing=_foodMatches.map(f=>f.n.toLowerCase().slice(0,10));
+        const fresh=api.filter(f=>!existing.some(e=>f.n.toLowerCase().includes(e)));
+        _foodMatches=[..._foodMatches,...fresh].slice(0,9);
+        renderFoodDropdown();
+      }
+    },500);
+  }
+}
+
 function pickFood(i){
   const f=_foodMatches[i];if(!f)return;
   document.getElementById('mealNameInp').value=f.n;
@@ -1189,6 +1361,7 @@ function pickFood(i){
   document.getElementById('mealCarbInp').value=f.carb;
   document.getElementById('mealFatInp').value=f.fat;
   document.getElementById('foodSuggest').style.display='none';
+  clearTimeout(_apiDebounce);
 }
 
 // ── PROGRESS ─────────────────────────────────────────────
