@@ -250,6 +250,34 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 .replace-opt.orig{border-color:rgba(248,113,113,.3);color:var(--red);background:rgba(248,113,113,.06)}
 .fb{display:flex;justify-content:space-between;align-items:center}
 .blue{color:var(--blue)}.green{color:var(--green)}.muted{color:var(--t2)}.bold{font-weight:700}
+
+/* HEATMAP */
+.hmap-outer{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.hmap-inner{display:flex;gap:2px;min-width:max-content}
+.hmap-daycol{display:flex;flex-direction:column;gap:2px}
+.hmap-mlbl{font-size:9px;color:var(--t3);height:14px;line-height:14px;overflow:hidden;white-space:nowrap}
+.hmap-cell{width:11px;height:11px;border-radius:2px;background:var(--s3)}
+.hmap-cell.lvl0{background:var(--s3)}
+.hmap-cell.lvl1{background:rgba(79,142,247,.2)}
+.hmap-cell.lvl2{background:rgba(79,142,247,.5)}
+.hmap-cell.lvl3{background:var(--blue)}
+.hmap-cell.lbl-cell{background:transparent;display:flex;align-items:center}
+.hmap-cell.lbl-cell span{font-size:8px;color:var(--t3);line-height:1;width:8px}
+.hmap-foot{font-size:11px;color:var(--t2);margin-top:8px}
+.hmap-legend{display:flex;align-items:center;gap:3px;margin-top:6px;justify-content:flex-end}
+.hmap-legend-lbl{font-size:9px;color:var(--t3)}
+/* MILESTONES */
+.milestone-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ms-item{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);padding:12px;text-align:center;opacity:.35;transition:all .3s}
+.ms-item.unlocked{opacity:1;border-color:rgba(79,142,247,.4);background:var(--blue-d)}
+.ms-icon{font-size:22px;margin-bottom:6px}
+.ms-lbl{font-size:12px;font-weight:800;color:var(--text)}
+.ms-desc{font-size:10px;color:var(--t2);margin-top:2px}
+.ms-item.unlocked .ms-lbl{color:var(--blue-l)}
+/* NOTES */
+.prog-notes{width:100%;min-height:90px;background:var(--s2);border:1.5px solid var(--s3);border-radius:var(--r-md);padding:12px 14px;color:var(--text);font-size:14px;line-height:1.6;resize:vertical;transition:border-color .15s}
+.prog-notes:focus{border-color:var(--blue);outline:none}
+.prog-notes::placeholder{color:var(--t3)}
 </style>
 </head>
 <body>
@@ -360,6 +388,27 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
       <div class="card">
         <div class="card-hd">Personal Records</div>
         <div class="pr-grid" id="prGrid"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd">Activity — Last 90 Days</div>
+        <div class="hmap-outer"><div class="hmap-inner" id="hmapGrid"></div></div>
+        <div class="hmap-foot" id="hmapFoot"></div>
+        <div class="hmap-legend">
+          <span class="hmap-legend-lbl">Less</span>
+          <div class="hmap-cell lvl0"></div>
+          <div class="hmap-cell lvl1"></div>
+          <div class="hmap-cell lvl2"></div>
+          <div class="hmap-cell lvl3"></div>
+          <span class="hmap-legend-lbl">More</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd">Mini Wins</div>
+        <div class="milestone-grid" id="milestoneGrid"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd">Notes & Reflections</div>
+        <textarea id="progNotes" class="prog-notes" placeholder="How are you feeling? Wins, struggles, what's clicking..." oninput="saveNotes(this.value)"></textarea>
       </div>
     </div>
 
@@ -498,9 +547,9 @@ const SCHED=[
   {t:'6:00',h:6, d:'Gym — done before your day even starts'},
   {t:'7:00',h:7, d:'Post-workout breakfast — biggest and most important meal'},
   {t:'7:15',h:7, d:'Vitamin D3, Omega-3, Vitamin C with food'},
-  {t:'12:00',h:12,d:'Lunch — load up on protein and carbs, you still have work ahead'},
-  {t:'15:00',h:15,d:'Afternoon — stay hydrated, move when you can'},
-  {t:'18:30',h:18,d:'Dinner — keep it controlled. Night is when the binging happens. Stay sharp.'},
+  {t:'12:00',h:12,d:'Lunch — hit it hard. Protein and carbs power the back half of your day.'},
+  {t:'15:00',h:15,d:'Afternoon — stay hydrated, keep moving when you can'},
+  {t:'18:30',h:18,d:'Dinner — keep it light. Kitchen closes at 7 PM. Hold the line.'},
   {t:'20:30',h:20,d:'Evening check-in — review your day, log if you haven\'t'},
   {t:'21:00',h:21,d:'Magnesium + Zinc before bed'},
   {t:'21:30',h:21,d:'Wind down — screens off, lights dim'},
@@ -508,12 +557,12 @@ const SCHED=[
 ];
 
 const PRS_DEFAULT=[
-  {id:'bench', n:'Bench Press',v:225},
-  {id:'squat', n:'Squat',      v:245},
-  {id:'dead',  n:'Deadlift',   v:405},
-  {id:'ohp',   n:'OHP',        v:0},
-  {id:'row',   n:'Barbell Row',v:0},
-  {id:'pullup',n:'Pull-ups',   v:0},
+  {id:'bench',  n:'Bench Press',   v:225, unit:'lbs'},
+  {id:'squat',  n:'Squat',         v:245, unit:'lbs'},
+  {id:'dead',   n:'Deadlift',      v:405, unit:'lbs'},
+  {id:'pullup', n:'Pull-ups',      v:0,   unit:'reps'},
+  {id:'pushup', n:'Push-ups',      v:0,   unit:'reps'},
+  {id:'dips',   n:'Weighted Dips', v:0,   unit:'lbs'},
 ];
 
 const ALTS={
@@ -686,14 +735,15 @@ function renderEvening(){
   const h=new Date().getHours(),el=document.getElementById('eveningSection');
   const s=gs(),key=dk(),ev=(s.evening||{})[key]||{};
   const items=[
-    {id:'ev1',lbl:'Logged dinner for the night'},
-    {id:'ev2',lbl:'Stayed within my calorie target'},
-    {id:'ev3',lbl:'Skipped the late-night snacking'},
+    {id:'ev0',lbl:'Kitchen closed — done eating by 7 PM'},
+    {id:'ev1',lbl:'Dinner was logged'},
+    {id:'ev2',lbl:'Hit my calorie target today'},
   ];
   el.innerHTML=`
     <div class="ev-card">
-      <div class="ev-hd">Evening Protocol${h<17?' — Active after 5 PM':''}</div>
-      <div class="ev-title">Stay on track tonight.</div>
+      <div class="ev-hd">Evening Protocol</div>
+      <div class="ev-title">No food after 7 PM.</div>
+      <div style="margin-bottom:12px;padding:9px 12px;background:rgba(251,191,36,.12);border-radius:var(--r-sm);border:1px solid rgba(251,191,36,.25);font-size:12px;color:var(--orange);line-height:1.5">Make this a hard rule. The habit is what beats the binging — not willpower.</div>
       ${items.map(item=>`
         <div class="ev-item" onclick="togEvening('${item.id}')">
           <div class="ev-ck${ev[item.id]?' on':''}"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -932,10 +982,13 @@ function renderProg(){
   const grid=document.getElementById('prGrid');grid.innerHTML='';
   PRS_DEFAULT.forEach(pr=>{
     const v=prs[pr.id]!==undefined?prs[pr.id]:pr.v;
+    const unit=pr.unit||'lbs';
     const d=document.createElement('div');d.className='pr-item';
-    d.innerHTML=`<div class="pr-name">${pr.n}</div><div class="pr-v" id="prv_${pr.id}">${v>0?v+' <span class="pr-u">lbs</span>':'—'}</div><input type="number" inputmode="decimal" class="pr-inp" placeholder="Update PR" oninput="updPR('${pr.id}',this.value)">`;
+    d.innerHTML=`<div class="pr-name">${pr.n}</div><div class="pr-v" id="prv_${pr.id}">${v>0?v+` <span class="pr-u">${unit}</span>`:'—'}</div><input type="number" inputmode="${unit==='reps'?'numeric':'decimal'}" class="pr-inp" placeholder="${unit==='reps'?'Max reps':'Update PR'}" oninput="updPR('${pr.id}',this.value,'${unit}')">`;
     grid.appendChild(d);
   });
+  renderHeatmap();renderMilestones();
+  const notesEl=document.getElementById('progNotes');if(notesEl)notesEl.value=s.notes||'';
 }
 function logWeight(){
   const val=parseFloat(document.getElementById('wtInp').value);if(!val||val<100||val>500)return;
@@ -944,11 +997,91 @@ function logWeight(){
   if(i>=0)s.weights[i].val=val;else s.weights.push({date:key,val});
   ss(s);document.getElementById('wtInp').value='';renderProg();
 }
-function updPR(id,val){
+function updPR(id,val,unit){
   const v=parseFloat(val);if(!v||v<=0)return;
+  const u=unit||((PRS_DEFAULT.find(p=>p.id===id)||{}).unit)||'lbs';
   const s=gs();if(!s.prs)s.prs={};s.prs[id]=v;saveDebounced(s);
-  document.getElementById('prv_'+id).innerHTML=v+' <span class="pr-u">lbs</span>';
+  document.getElementById('prv_'+id).innerHTML=v+` <span class="pr-u">${u}</span>`;
 }
+
+// ── HEATMAP ───────────────────────────────────────────────
+function renderHeatmap(){
+  const el=document.getElementById('hmapGrid');if(!el)return;
+  const s=gs();
+  const today=new Date();today.setHours(0,0,0,0);
+  const start=new Date(today);start.setDate(start.getDate()-89);
+  const dow=start.getDay();start.setDate(start.getDate()-(dow===0?6:dow-1));
+  function actLevel(date){
+    const key=dk(date);
+    const hasSW=Object.values((s.supps||{})[key]||{}).some(Boolean)||(s.water||{})[key]>0;
+    const hasW=Object.keys(s.workouts||{}).some(wk=>wk.startsWith(key));
+    const hasM=((s.meals||{})[key]||[]).length>0||((s.customMeals||{})[key]||[]).length>0;
+    if(hasW&&hasM)return 3;
+    if(hasW||hasM)return 2;
+    if(hasSW)return 1;
+    return 0;
+  }
+  const dates=[];const d=new Date(start);
+  while(d<=today){dates.push(new Date(d));d.setDate(d.getDate()+1);}
+  const weeks=[];for(let i=0;i<dates.length;i+=7)weeks.push(dates.slice(i,i+7));
+  const dayLabels=['M','T','W','T','F','S','S'];
+  let html='<div class="hmap-daycol" style="margin-right:4px">';
+  html+='<div class="hmap-mlbl"></div>';
+  dayLabels.forEach((l,i)=>html+=`<div class="hmap-cell lbl-cell"><span>${[0,2,4].includes(i)?l:''}</span></div>`);
+  html+='</div>';
+  let prevMon=-1;
+  weeks.forEach(week=>{
+    const mon=week[0].getMonth();
+    const mLabel=mon!==prevMon?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][mon]:'';
+    prevMon=mon;
+    html+=`<div class="hmap-daycol"><div class="hmap-mlbl">${mLabel}</div>`;
+    for(let r=0;r<7;r++){
+      const cell=week[r];
+      if(!cell||cell>today)html+='<div class="hmap-cell" style="opacity:.08"></div>';
+      else html+=`<div class="hmap-cell lvl${actLevel(cell)}"></div>`;
+    }
+    html+='</div>';
+  });
+  el.innerHTML=html;
+  const activeDays=dates.filter(x=>x<=today&&actLevel(x)>0).length;
+  const foot=document.getElementById('hmapFoot');
+  if(foot)foot.textContent=`${activeDays} active day${activeDays!==1?'s':''} in the last 90 days`;
+}
+
+// ── MILESTONES ────────────────────────────────────────────
+const MILESTONES=[
+  {id:'log1',icon:'📝',label:'First Log',   desc:'First workout tracked'},
+  {id:'wk1', icon:'🔥',label:'First Week',  desc:'7-day streak'},
+  {id:'mo1', icon:'💪',label:'One Month',   desc:'30-day streak'},
+  {id:'lb5', icon:'📉',label:'5 lbs Down', desc:'First 5 pounds gone'},
+  {id:'half',icon:'🎯',label:'Halfway',     desc:'8 lbs toward 170'},
+  {id:'goal',icon:'⚡',label:'Goal Weight', desc:'170 lbs — 6-pack done'},
+  {id:'b225',icon:'🏋️',label:'225 Bench',  desc:'Two plates pressed'},
+  {id:'d405',icon:'🔱',label:'405 Dead',    desc:'Four plates pulled'},
+];
+function checkMilestone(id,s){
+  if(id==='log1')return Object.keys(s.workouts||{}).length>0;
+  if(id==='wk1')return calcStreak()>=7;
+  if(id==='mo1')return calcStreak()>=30;
+  const wts=s.weights||[],cur=(wts[wts.length-1]||{}).val||S_WT;
+  if(id==='lb5')return S_WT-cur>=5;
+  if(id==='half')return (S_WT-cur)/(S_WT-G_WT)>=0.5;
+  if(id==='goal')return cur<=G_WT;
+  if(id==='b225')return(s.prs||{}).bench>=225;
+  if(id==='d405')return(s.prs||{}).dead>=405;
+  return false;
+}
+function renderMilestones(){
+  const el=document.getElementById('milestoneGrid');if(!el)return;
+  const s=gs();el.innerHTML='';
+  MILESTONES.forEach(m=>{
+    const unlocked=checkMilestone(m.id,s);
+    const d=document.createElement('div');d.className='ms-item'+(unlocked?' unlocked':'');
+    d.innerHTML=`<div class="ms-icon">${m.icon}</div><div class="ms-lbl">${m.label}</div><div class="ms-desc">${m.desc}</div>`;
+    el.appendChild(d);
+  });
+}
+function saveNotes(val){const s=gs();s.notes=val;saveDebounced(s);}
 
 // ── INIT ─────────────────────────────────────────────────
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
