@@ -479,10 +479,93 @@ textarea.f-inp{resize:none;line-height:1.5;font-size:14px;font-weight:400;min-he
       </div>
     </div>
 
-    <!-- ══ SECTION 5: LIFESTYLE ══ -->
+    <!-- ══ SECTION 5: SUPPLEMENTS ══ -->
     <div class="sec" id="s5">
       <div class="sec-hd">
-        <div class="sec-num">Section 5 of 6</div>
+        <div class="sec-num">Section 5 of 7</div>
+        <div class="sec-title">Supplements & schedule.</div>
+        <div class="sec-sub">Your app includes a personalized supplement schedule. This makes sure it matches what you actually take — not some generic list.</div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">What supplements do you currently take?</div>
+        <div class="q-hint">Select everything — even if you take it only sometimes.</div>
+        <div class="chips" id="q_supp_current">
+          <button class="chip" data-val="Creatine">Creatine</button>
+          <button class="chip" data-val="Whey Protein">Whey Protein</button>
+          <button class="chip" data-val="Pre-workout">Pre-workout</button>
+          <button class="chip" data-val="Vitamin D3">Vitamin D3</button>
+          <button class="chip" data-val="Omega-3 / Fish Oil">Omega-3</button>
+          <button class="chip" data-val="Magnesium">Magnesium</button>
+          <button class="chip" data-val="Zinc">Zinc</button>
+          <button class="chip" data-val="Vitamin C">Vitamin C</button>
+          <button class="chip" data-val="B12">B12</button>
+          <button class="chip" data-val="Multivitamin">Multivitamin</button>
+          <button class="chip" data-val="Melatonin">Melatonin</button>
+          <button class="chip" data-val="Ashwagandha">Ashwagandha</button>
+          <button class="chip" data-val="None">None yet</button>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Anything else not listed?</div>
+        <input type="text" class="f-inp" id="q_supp_other" placeholder="e.g. Collagen, Rhodiola, Beef liver capsules, Turmeric">
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Are you open to adding new supplements?</div>
+        <div class="radio-grid" id="q_supp_open">
+          <div class="radio-card" data-val="Yes — recommend what you think I need">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">Yes, recommend away</div><div class="rc-sub">I'll add what you think actually moves the needle</div></div>
+          </div>
+          <div class="radio-card" data-val="Basics only — protein, creatine, vitamins">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">Basics only</div><div class="rc-sub">Keep it simple — the essentials only</div></div>
+          </div>
+          <div class="radio-card" data-val="No — just work with what I already take">
+            <div class="rc-dot"></div>
+            <div class="rc-text"><div class="rc-main">No — use what I have</div><div class="rc-sub">Just build the schedule around my current stack</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">Monthly supplement budget</div>
+        <div class="radio-grid" id="q_supp_budget">
+          <div class="radio-card" data-val="$0 — I won't spend on supplements">
+            <div class="rc-dot"></div><div class="rc-text"><div class="rc-main">$0</div><div class="rc-sub">I'm not buying any right now</div></div>
+          </div>
+          <div class="radio-card" data-val="$20–40 / month">
+            <div class="rc-dot"></div><div class="rc-text"><div class="rc-main">$20–40 / month</div><div class="rc-sub">Basics are fine</div></div>
+          </div>
+          <div class="radio-card" data-val="$40–80 / month">
+            <div class="rc-dot"></div><div class="rc-text"><div class="rc-main">$40–80 / month</div><div class="rc-sub">Room for a solid stack</div></div>
+          </div>
+          <div class="radio-card" data-val="$80+ / month">
+            <div class="rc-dot"></div><div class="rc-text"><div class="rc-main">$80+ / month</div><div class="rc-sub">I want the full setup</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-lbl">When do you prefer to work out?</div>
+        <div class="chips" id="q_wktime">
+          <button class="chip" data-val="Early morning (5–7 AM)">Early AM</button>
+          <button class="chip" data-val="Morning (7–9 AM)">Morning</button>
+          <button class="chip" data-val="Midday (11 AM–1 PM)">Midday</button>
+          <button class="chip" data-val="Afternoon (3–5 PM)">Afternoon</button>
+          <button class="chip" data-val="Evening (5–8 PM)">Evening</button>
+          <button class="chip" data-val="Late night (8 PM+)">Late night</button>
+          <button class="chip" data-val="No set time — it varies">Varies</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SECTION 6: LIFESTYLE ══ -->
+    <div class="sec" id="s6">
+      <div class="sec-hd">
+        <div class="sec-num">Section 6 of 7</div>
         <div class="sec-title">Your life outside the gym.</div>
         <div class="sec-sub">Your schedule, stress, and sleep are just as important as your workouts.</div>
       </div>
@@ -559,10 +642,10 @@ textarea.f-inp{resize:none;line-height:1.5;font-size:14px;font-weight:400;min-he
       </div>
     </div>
 
-    <!-- ══ SECTION 6: YOUR PROFILE ══ -->
-    <div class="sec" id="s6">
+    <!-- ══ SECTION 7: YOUR PROFILE ══ -->
+    <div class="sec" id="s7">
       <div class="sec-hd">
-        <div class="sec-num">Section 6 of 6</div>
+        <div class="sec-num">Section 7 of 7</div>
         <div class="sec-title">Your Blueprint is ready.</div>
         <div class="sec-sub">Copy the profile below and send it to your coach. They'll build your personalized program from this.</div>
       </div>
@@ -599,7 +682,7 @@ textarea.f-inp{resize:none;line-height:1.5;font-size:14px;font-weight:400;min-he
 
 <script>
 let cur = 1;
-const TOTAL = 6;
+const TOTAL = 7;
 
 // ── MULTI CHIP (toggle each) ───────────────────
 document.querySelectorAll('.chips').forEach(wrap=>{
@@ -609,7 +692,7 @@ document.querySelectorAll('.chips').forEach(wrap=>{
 });
 
 // ── SINGLE CHIP (select one) ──────────────────
-['q_days','q_duration','q_stress','q_sleep','q_meals'].forEach(id=>{
+['q_days','q_duration','q_stress','q_sleep','q_meals','q_wktime'].forEach(id=>{
   const w=document.getElementById(id);
   if(!w)return;
   w.querySelectorAll('.chip').forEach(c=>{
@@ -665,7 +748,7 @@ function updateProgress(){
   document.getElementById('progLabel').textContent=`Step ${cur} of ${TOTAL}`;
   document.getElementById('progPct').textContent=pct+'%';
   document.getElementById('backBtn').style.display=cur>1?'block':'none';
-  document.getElementById('nextBtn').textContent=cur===TOTAL-1?'Build My Profile →':'Continue →';
+  document.getElementById('nextBtn').textContent=cur===TOTAL-1?'Build My Profile →':cur===TOTAL?'':'Continue →';
   document.getElementById('nextBtn').style.display=cur===TOTAL?'none':'block';
 }
 
@@ -688,6 +771,16 @@ function prevSec(){
 function detectFlags(a){
   const blob=(a.nut_challenge+' '+a.obstacles+' '+a.easy+' '+a.worked).toLowerCase();
   const flags=[];
+  // Supplement flags
+  if(a.supp_open&&!/no —/.test(a.supp_open)){
+    flags.push({icon:'💊',label:'Personalized supplement schedule',desc:`Stack built around what ${a.name||'they'} already takes + budget-matched additions`});
+  }
+  if(a.supp_current&&!/none/i.test(a.supp_current)&&a.supp_current!=='Not specified'){
+    flags.push({icon:'✅',label:'Existing supplements integrated',desc:`Current stack (${a.supp_current}) mapped into the daily schedule`});
+  }
+  if(a.wktime&&/early|5–7|7–9/i.test(a.wktime)){
+    flags.push({icon:'⏰',label:'Early morning schedule',desc:'Pre-workout timing, supplement schedule, and meals aligned to early gym sessions'});
+  }
   if(/track|log|forget|remind|calori|count|record/.test(blob)){
     flags.push({icon:'🔔',label:'Meal reminders enabled',desc:'Will add timed notifications to log food each day'});
   }
@@ -747,6 +840,11 @@ function buildProfile(){
     dislikes:inp('q_dislikes'),
     meals:getSingleChip('q_meals'),
     nut_challenge:getRadioVal('q_nut_challenge'),
+    supp_current:getChipVals('q_supp_current'),
+    supp_other:inp('q_supp_other'),
+    supp_open:getRadioVal('q_supp_open'),
+    supp_budget:getRadioVal('q_supp_budget'),
+    wktime:getSingleChip('q_wktime'),
     wake:inp('q_wake'),
     bed:inp('q_bed'),
     job:getRadioVal('q_job'),
@@ -791,7 +889,13 @@ Dislikes: ${a.dislikes||'None'}
 Meals/day: ${a.meals}
 Main challenge: ${a.nut_challenge}
 
+━━━ SUPPLEMENTS ━━━━━━━━━━━━━━━━━━━━
+Currently taking: ${a.supp_current}${a.supp_other?`\n  + Other: ${a.supp_other}`:''}
+Open to new supplements: ${a.supp_open}
+Monthly budget: ${a.supp_budget}
+
 ━━━ LIFESTYLE ━━━━━━━━━━━━━━━━━━━━━━
+Preferred workout time: ${a.wktime}
 Wake: ${a.wake||'—'} | Bed: ${a.bed||'—'}
 Job: ${a.job}
 Stress: ${a.stress} | Sleep: ${a.sleep}
