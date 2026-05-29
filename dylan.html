@@ -231,6 +231,40 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 .pr-inp::placeholder{color:var(--t3);font-weight:400;font-size:12px}
 .days-to-goal{margin-top:14px;padding:12px 14px;background:rgba(251,191,36,.07);border-radius:var(--r-sm);border-left:2px solid var(--orange);font-size:12px;color:var(--orange);line-height:1.5}
 
+/* MEAL SLOTS */
+.slot-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:12px}
+.slot-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.slot-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--t2)}
+.slot-time{font-size:11px;color:var(--t3);margin-top:1px}
+.slot-cals{font-size:12px;font-weight:700;color:var(--blue);margin-top:3px}
+.slot-add-btn{background:transparent;border:1.5px solid var(--s3);border-radius:14px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;display:flex;align-items:center;gap:3px;flex-shrink:0}
+.slot-add-btn svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.slot-empty{font-size:12px;color:var(--t3);padding:4px 0 2px}
+/* SUPP EDITING */
+.sg-add-btn{background:transparent;border:none;color:var(--t2);cursor:pointer;padding:2px 6px;display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;letter-spacing:.4px;opacity:.8}
+.sg-add-btn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.sg-add-form{padding:10px 14px 12px;border-top:1px solid var(--border);display:none}
+.sg-add-form.open{display:block}
+.sg-add-row{display:flex;gap:6px}
+.sg-ai{flex:1;background:var(--s2);border:1px solid var(--s3);border-radius:var(--r-sm);padding:9px 10px;color:var(--text);font-size:12px;min-width:0;transition:border-color .15s}
+.sg-ai:focus{border-color:var(--blue);outline:none}
+.sg-ai::placeholder{color:var(--t3)}
+.sg-save-btn{background:var(--blue);color:#fff;border:none;border-radius:var(--r-sm);padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0}
+.sg-item-custom .sg-dot{background:rgba(79,142,247,.5)}
+.sg-cdel{background:transparent;border:none;color:var(--t3);cursor:pointer;padding:2px 4px;font-size:15px;line-height:1;flex-shrink:0}
+/* ACCOUNTABILITY */
+.acct-card{background:linear-gradient(135deg,rgba(52,211,153,.07),rgba(52,211,153,.02));border:1px solid rgba(52,211,153,.2);border-radius:var(--r-lg);padding:18px;margin-bottom:12px}
+.acct-hd{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:4px}
+.acct-title{font-size:15px;font-weight:800;margin-bottom:8px}
+.acct-row{display:flex;gap:8px;margin-bottom:8px}
+.acct-inp{flex:1;background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.15);border-radius:var(--r-sm);padding:10px 12px;color:var(--text);font-size:13px;min-width:0;transition:border-color .15s}
+.acct-inp:focus{border-color:var(--green);outline:none}
+.acct-inp::placeholder{color:var(--t3)}
+.acct-note{font-size:11px;color:var(--t2);line-height:1.5;margin-bottom:12px}
+.acct-alert{padding:12px 14px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);border-radius:var(--r-sm);margin-bottom:10px;font-size:12px;color:var(--red);line-height:1.5;display:none}
+.acct-alert.show{display:block}
+.acct-send{width:100%;padding:13px;background:var(--green);color:#070c18;border:none;border-radius:var(--r-md);font-size:14px;font-weight:800;cursor:pointer;display:none}
+.acct-send.show{display:block}
 /* FOOD AUTOCOMPLETE */
 .food-suggest{position:absolute;top:calc(100% + 2px);left:0;right:0;background:var(--s2);border:1px solid var(--border);border-radius:var(--r-md);z-index:200;max-height:230px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 .food-opt{padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
@@ -322,8 +356,9 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
         <div class="water-lbl" id="waterLbl"></div>
       </div>
       <div id="eveningSection"></div>
+      <div id="acctCard"></div>
       <div class="card">
-        <div class="card-hd">Supplement Schedule</div>
+        <div class="card-hd">Supplement Schedule <span id="suppEditToggle" style="font-size:10px;color:var(--blue);cursor:pointer;font-weight:600;letter-spacing:0;text-transform:none;margin-left:8px" onclick="toggleSuppEdit()">+ Customize</span></div>
         <div id="suppList"></div>
       </div>
       <div class="card">
@@ -360,17 +395,9 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
             <div class="ring-l">Fat</div><div class="ring-s" id="sFat">/70g</div>
           </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-hd">Log Food</div>
-        <button class="eat-log-btn" onclick="showMealModal()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Log a Meal or Snack</button>
-        <div id="customMealList"></div>
         <div class="rem-bar" id="mealRem"></div>
       </div>
-      <div class="card">
-        <div class="card-hd">Meal Plan Reference</div>
-        <div id="mealList"></div>
-      </div>
+      <div id="mealSlots"></div>
     </div>
 
     <!-- PROGRESS -->
@@ -434,6 +461,14 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 <div id="mealModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeMealModal()">
   <div class="modal">
     <div class="modal-hd"><span>Log a Meal</span><button onclick="closeMealModal()">×</button></div>
+    <div class="form-group"><div class="form-lbl">Meal Slot</div>
+      <select id="mealSlotInp" class="form-inp" style="cursor:pointer;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237b9bc4' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 12px center">
+        <option value="breakfast">🌅 Breakfast</option>
+        <option value="lunch">☀️ Lunch</option>
+        <option value="dinner">🌙 Dinner</option>
+        <option value="snack">⚡ Snack / Extra</option>
+      </select>
+    </div>
     <div class="form-group"><div class="form-lbl">What did you eat?</div>
       <div style="position:relative">
         <input id="mealNameInp" type="text" class="form-inp" placeholder="e.g. chicken breast 6 oz" oninput="onFoodSearch(this.value)" autocomplete="off">
@@ -551,9 +586,15 @@ const SUPPS=[
 ];
 
 const MEALS=[
-  {id:'m1',t:'7:00 AM',n:'Post-Workout Breakfast',d:'4 eggs + 2 whites, 1.5 cups oats, banana, glass of milk',cal:850,pro:60,carb:95,fat:20},
-  {id:'m2',t:'12:00 PM',n:'Lunch',d:'8oz chicken breast or steak, 1.5 cups white rice, mixed vegetables',cal:900,pro:70,carb:100,fat:18},
-  {id:'m3',t:'6:30 PM',n:'Dinner',d:'6oz chicken, turkey, or lean beef, 1 cup rice, side salad with olive oil',cal:700,pro:55,carb:75,fat:22},
+  {id:'m1',slot:'breakfast',t:'7:00 AM', n:'Post-Workout Breakfast',d:'4 eggs + 2 whites, 1.5 cups oats, banana, glass of milk',cal:850,pro:60,carb:95,fat:20},
+  {id:'m2',slot:'lunch',    t:'12:00 PM',n:'Lunch',d:'8oz chicken breast or steak, 1.5 cups white rice, mixed vegetables',cal:900,pro:70,carb:100,fat:18},
+  {id:'m3',slot:'dinner',   t:'6:30 PM', n:'Dinner',d:'6oz chicken, turkey, or lean beef, 1 cup rice, side salad with olive oil',cal:700,pro:55,carb:75,fat:22},
+];
+const MEAL_SLOTS=[
+  {id:'breakfast',label:'Breakfast',  time:'7:00 AM',  mealId:'m1'},
+  {id:'lunch',    label:'Lunch',      time:'12:00 PM', mealId:'m2'},
+  {id:'dinner',   label:'Dinner',     time:'6:30 PM',  mealId:'m3'},
+  {id:'snack',    label:'Snacks / Extra',time:'',      mealId:null},
 ];
 
 const FOOD_DB=[
@@ -791,7 +832,7 @@ function renderToday(){
     <div class="stat-pill"><div class="stat-pill-val">${(s.water||{})[key]||0}</div><div class="stat-pill-lbl">Cups Water</div></div>
     <div class="stat-pill"><div class="stat-pill-val">${suppDone}/${SUPPS.length}</div><div class="stat-pill-lbl">Supp Groups</div></div>`;
 
-  renderMacroBars();renderWater();renderEvening();renderSupps();renderSched();
+  renderMacroBars();renderWater();renderEvening();renderAcct();renderSupps();renderSched();
 }
 
 function renderMacroBars(){
@@ -847,21 +888,47 @@ function togEvening(id){
   ss(s);renderEvening();
 }
 
+let _suppEditMode=false;
+function toggleSuppEdit(){
+  _suppEditMode=!_suppEditMode;
+  document.getElementById('suppEditToggle').textContent=_suppEditMode?'✓ Done':'+ Customize';
+  renderSupps();
+}
+
 function renderSupps(){
   const s=gs(),key=dk(),done=(s.supps||{})[key]||{};
   const el=document.getElementById('suppList');el.innerHTML='';
   SUPPS.forEach((grp,gi)=>{
-    const allDone=grp.items.every(item=>done[item.id]);
+    const custom=(s.userSupps||{})[gi]||[];
+    const allItems=[...grp.items,...custom.map((c,ci)=>({id:`uc_${gi}_${ci}`,n:c.n,d:c.d,custom:true,ci}))];
+    const allDone=allItems.every(item=>done[item.id]);
+    const totalCount=allItems.length;
     const card=document.createElement('div');card.className='sg-card';
-    card.innerHTML=`
+    let html=`
       <div class="sg-toggle${allDone?' done':''}" onclick="togSuppGroup(${gi})">
         <div class="sg-toggle-left">
           <div class="sg-ck${allDone?' on':''}"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div><div class="sg-time">${grp.time}</div><div class="sg-count">${grp.items.length} supplement${grp.items.length>1?'s':''}</div></div>
-        </div>${grp.icon}</div>
-      <div class="sg-items">${grp.items.map(item=>`
-        <div class="sg-item"><span class="sg-dot"></span><span class="sg-iname">${item.n}</span><span class="sg-idose">${item.d}</span></div>`).join('')}
+          <div><div class="sg-time">${grp.time}</div><div class="sg-count">${totalCount} supplement${totalCount!==1?'s':''}</div></div>
+        </div>${grp.icon}
+      </div>
+      <div class="sg-items">
+        ${grp.items.map(item=>`
+          <div class="sg-item"><span class="sg-dot"></span><span class="sg-iname">${item.n}</span><span class="sg-idose">${item.d}</span></div>`).join('')}
+        ${custom.map((c,ci)=>`
+          <div class="sg-item sg-item-custom" style="display:flex;align-items:center;gap:6px">
+            <span class="sg-dot"></span>
+            <div style="flex:1;min-width:0"><span class="sg-iname">${c.n}</span><span class="sg-idose">${c.d||''}</span></div>
+            ${_suppEditMode?`<button class="sg-cdel" onclick="delCustomSupp(${gi},${ci});event.stopPropagation()">×</button>`:''}
+          </div>`).join('')}
+      </div>
+      <div class="sg-add-form${_suppEditMode?' open':''}" id="sgform_${gi}">
+        <div class="sg-add-row">
+          <input class="sg-ai" id="sgname_${gi}" placeholder="Supplement name (e.g. B12)" autocomplete="off">
+          <input class="sg-ai" id="sgdose_${gi}" placeholder="Dose (e.g. 1000mcg)" style="max-width:130px" autocomplete="off">
+          <button class="sg-save-btn" onclick="saveCustomSupp(${gi})">Add</button>
+        </div>
       </div>`;
+    card.innerHTML=html;
     el.appendChild(card);
   });
 }
@@ -869,9 +936,23 @@ function renderSupps(){
 function togSuppGroup(gi){
   const s=gs(),key=dk();
   if(!s.supps)s.supps={};if(!s.supps[key])s.supps[key]={};
-  const grp=SUPPS[gi],allDone=grp.items.every(item=>s.supps[key][item.id]);
-  grp.items.forEach(item=>{s.supps[key][item.id]=!allDone;});
+  const grp=SUPPS[gi],custom=(s.userSupps||{})[gi]||[];
+  const allItems=[...grp.items,...custom.map((c,ci)=>({id:`uc_${gi}_${ci}`}))];
+  const allDone=allItems.every(item=>s.supps[key][item.id]);
+  allItems.forEach(item=>{s.supps[key][item.id]=!allDone;});
   ss(s);renderSupps();renderToday();
+}
+
+function saveCustomSupp(gi){
+  const n=(document.getElementById(`sgname_${gi}`)?.value||'').trim();
+  if(!n)return;
+  const d=(document.getElementById(`sgdose_${gi}`)?.value||'').trim();
+  const s=gs();if(!s.userSupps)s.userSupps={};if(!s.userSupps[gi])s.userSupps[gi]=[];
+  s.userSupps[gi].push({n,d});ss(s);renderSupps();
+}
+function delCustomSupp(gi,ci){
+  const s=gs();if(s.userSupps&&s.userSupps[gi])s.userSupps[gi].splice(ci,1);
+  ss(s);renderSupps();
 }
 
 function renderSched(){
@@ -991,35 +1072,69 @@ function showReplaceModal(exId,wkKey){
 function closeReplaceModal(){document.getElementById('replaceModal').style.display='none';}
 
 // ── EAT ──────────────────────────────────────────────────
+const PLUS_SVG=`<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+const DEL_SVG=`<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+const CK_SVG=`<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`;
+
 function renderEat(){
-  const s=gs(),key=dk(),logged=(s.meals||{})[key]||[],custom=(s.customMeals||{})[key]||[];
+  const s=gs(),key=dk(),logged=(s.meals||{})[key]||[],allCustom=(s.customMeals||{})[key]||[];
   let cal=0,pro=0,carb=0,fat=0;
   logged.forEach(id=>{const m=MEALS.find(x=>x.id===id);if(m){cal+=m.cal;pro+=m.pro;carb+=m.carb;fat+=m.fat;}});
-  custom.forEach(m=>{cal+=m.cal||0;pro+=m.pro||0;carb+=m.carb||0;fat+=m.fat||0;});
+  allCustom.forEach(m=>{cal+=m.cal||0;pro+=m.pro||0;carb+=m.carb||0;fat+=m.fat||0;});
   const C=175.9,setR=(id,v,mx)=>{document.getElementById(id).style.strokeDashoffset=C-Math.min(1,v/mx)*C;};
   setR('rCal',cal,T.cal);document.getElementById('vCal').textContent=cal;
   setR('rPro',pro,T.pro);document.getElementById('vPro').textContent=pro;
   setR('rCrb',carb,T.carb);document.getElementById('vCrb').textContent=carb;
   setR('rFat',fat,T.fat);document.getElementById('vFat').textContent=fat;
-  const cList=document.getElementById('customMealList');cList.innerHTML='';
-  if(custom.length){
-    custom.forEach((m,i)=>{
-      const d=document.createElement('div');d.className='custom-meal';
-      d.innerHTML=`<div class="custom-meal-info"><div class="custom-meal-name">${m.name||'Meal'}</div><div class="custom-meal-macros">${m.pro||0}g protein · ${m.carb||0}g carbs · ${m.fat||0}g fat</div></div><div class="custom-meal-cal">${m.cal||0}</div><button class="del-btn" onclick="deleteMeal(${i})"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
-      cList.appendChild(d);
-    });
-  } else {
-    cList.innerHTML='<div style="font-size:12px;color:var(--t2);padding:4px 0 8px">No meals logged today. Use the button above.</div>';
-  }
   document.getElementById('mealRem').innerHTML=`Remaining: <strong>${T.cal-cal} cal</strong> · <strong style="color:var(--green)">${T.pro-pro}g protein</strong>`;
-  const list=document.getElementById('mealList');list.innerHTML='';
-  MEALS.forEach(meal=>{
-    const on=logged.includes(meal.id);
-    const d=document.createElement('div');d.className='meal';
-    d.innerHTML=`<div class="mck${on?' on':''}"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <div class="meal-info"><div class="meal-t">${meal.t}</div><div class="meal-n">${meal.n}</div><div class="meal-d">${meal.d}</div><div class="meal-m">${meal.pro}g pro · ${meal.carb}g carbs · ${meal.fat}g fat</div></div>
-      <div class="meal-cal">${meal.cal}</div>`;
-    d.onclick=()=>togMeal(meal.id);list.appendChild(d);
+
+  const slotsEl=document.getElementById('mealSlots');slotsEl.innerHTML='';
+  MEAL_SLOTS.forEach(slot=>{
+    const preset=slot.mealId?MEALS.find(m=>m.id===slot.mealId):null;
+    const presetOn=!!preset&&logged.includes(preset.id);
+    const slotCustom=allCustom.map((m,i)=>({...m,_i:i})).filter(m=>m.slot===slot.id||(slot.id==='snack'&&!m.slot));
+    let slotCal=0;
+    if(presetOn&&preset)slotCal+=preset.cal;
+    slotCustom.forEach(m=>slotCal+=m.cal||0);
+
+    const card=document.createElement('div');card.className='slot-card';
+    let html=`<div class="slot-hdr">
+      <div>
+        <div class="slot-name">${slot.label}</div>
+        ${slot.time?`<div class="slot-time">${slot.time}</div>`:''}
+        ${slotCal>0?`<div class="slot-cals">${slotCal} cal logged</div>`:''}
+      </div>
+      <button class="slot-add-btn" onclick="showMealModal('${slot.id}')">${PLUS_SVG} Add</button>
+    </div>`;
+
+    if(preset){
+      html+=`<div class="meal" onclick="togMeal('${preset.id}')">
+        <div class="mck${presetOn?' on':''}">${CK_SVG}</div>
+        <div class="meal-info">
+          <div class="meal-t">Suggested plan${presetOn?' — logged':''}</div>
+          <div class="meal-n">${preset.n}</div>
+          <div class="meal-d">${preset.d}</div>
+          <div class="meal-m">${preset.pro}g pro · ${preset.carb}g carbs · ${preset.fat}g fat</div>
+        </div>
+        <div class="meal-cal">${preset.cal}</div>
+      </div>`;
+    }
+
+    slotCustom.forEach(m=>{
+      html+=`<div class="custom-meal" style="${preset?'border-top:1px solid var(--border);margin-top:8px;padding-top:10px':''}">
+        <div class="custom-meal-info">
+          <div class="custom-meal-name">${m.name||'Meal'}</div>
+          <div class="custom-meal-macros">${m.pro||0}g protein · ${m.carb||0}g carbs · ${m.fat||0}g fat</div>
+        </div>
+        <div class="custom-meal-cal">${m.cal||0}</div>
+        <button class="del-btn" onclick="deleteMeal(${m._i})">${DEL_SVG}</button>
+      </div>`;
+    });
+
+    if(!preset&&slotCustom.length===0){
+      html+=`<div class="slot-empty">Nothing logged yet — tap Add to track this meal.</div>`;
+    }
+    card.innerHTML=html;slotsEl.appendChild(card);
   });
 }
 function togMeal(id){
@@ -1027,8 +1142,9 @@ function togMeal(id){
   const i=s.meals[key].indexOf(id);if(i>=0)s.meals[key].splice(i,1);else s.meals[key].push(id);
   ss(s);renderEat();renderMacroBars();
 }
-function showMealModal(){
+function showMealModal(slot){
   ['mealNameInp','mealCalInp','mealProInp','mealCarbInp','mealFatInp'].forEach(id=>{document.getElementById(id).value='';});
+  if(slot){const sel=document.getElementById('mealSlotInp');if(sel)sel.value=slot;}
   document.getElementById('foodSuggest').style.display='none';
   document.getElementById('mealModal').style.display='flex';
   setTimeout(()=>document.getElementById('mealNameInp').focus(),100);
@@ -1043,8 +1159,9 @@ function saveMeal(){
   const pro=parseInt(document.getElementById('mealProInp').value)||0;
   const carb=parseInt(document.getElementById('mealCarbInp').value)||0;
   const fat=parseInt(document.getElementById('mealFatInp').value)||0;
+  const slot=document.getElementById('mealSlotInp')?.value||'snack';
   const s=gs(),key=dk();if(!s.customMeals)s.customMeals={};if(!s.customMeals[key])s.customMeals[key]=[];
-  s.customMeals[key].push({name,cal,pro,carb,fat});ss(s);closeMealModal();renderEat();renderMacroBars();
+  s.customMeals[key].push({name,cal,pro,carb,fat,slot});ss(s);closeMealModal();renderEat();renderMacroBars();
 }
 function deleteMeal(i){
   const s=gs(),key=dk();if(s.customMeals&&s.customMeals[key])s.customMeals[key].splice(i,1);
@@ -1215,6 +1332,41 @@ function renderMilestones(){
   });
 }
 function saveNotes(val){const s=gs();s.notes=val;saveDebounced(s);}
+
+// ── ACCOUNTABILITY ────────────────────────────────────────
+function renderAcct(){
+  const el=document.getElementById('acctCard');if(!el)return;
+  const s=gs(),acct=s.acct||{};
+  const h=new Date().getHours(),key=dk();
+  const ev=(s.evening||{})[key]||{};
+  const allEvDone=[ev.ev0,ev.ev1,ev.ev2].every(Boolean);
+  // Show send button after 8 PM if evening goals not completed and a partner is set
+  const showAlert=h>=20&&!allEvDone&&acct.name&&acct.phone;
+  el.innerHTML=`
+    <div class="acct-card">
+      <div class="acct-hd">Accountability</div>
+      <div class="acct-title">Who's holding you to it?</div>
+      <div class="acct-row">
+        <input class="acct-inp" id="acctName" placeholder="Friend's name" value="${acct.name||''}" oninput="saveAcct('name',this.value)">
+        <input class="acct-inp" id="acctPhone" placeholder="Their number" inputmode="tel" value="${acct.phone||''}" oninput="saveAcct('phone',this.value)" style="max-width:150px">
+      </div>
+      <div class="acct-note">If you miss your evening goals, a tap sends them a text. No hiding.</div>
+      ${showAlert?`<div class="acct-alert show">⚠️ It's past 8 PM — evening goals aren't done yet. Send ${acct.name} a check-in?</div>`:''}
+      ${showAlert?`<button class="acct-send show" onclick="sendAcctText()">📲 Text ${acct.name}</button>`:''}
+      ${!acct.name&&!acct.phone?`<div style="font-size:11px;color:var(--t3)">Add a name and number above to activate accountability texts.</div>`:''}
+    </div>`;
+}
+function saveAcct(field,val){
+  const s=gs();if(!s.acct)s.acct={};s.acct[field]=val;saveDebounced(s);
+}
+function sendAcctText(){
+  const s=gs(),acct=s.acct||{};
+  const name=acct.name||'Dylan';
+  const phone=(acct.phone||'').replace(/\D/g,'');
+  if(!phone)return alert('Add your accountability partner\'s number first.');
+  const body=encodeURIComponent(`Hey! Dylan missed his evening Blueprint goals tonight. Give him a push — he needs to hold the line. 💪`);
+  window.location.href=`sms:+1${phone}?body=${body}`;
+}
 
 // ── INIT ─────────────────────────────────────────────────
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
