@@ -963,7 +963,11 @@ function togSet(exId,idx,wkKey){
   const ex=prog.ex.find(e=>e.id===exId);
   if(!s.workouts[wkKey][exId])s.workouts[wkKey][exId]=Array.from({length:ex.s},()=>({w:'',r:'',done:false}));
   s.workouts[wkKey][exId][idx].done=!s.workouts[wkKey][exId][idx].done;
+  // remember which exercises are open before re-render
+  const openIds=Array.from(document.querySelectorAll('.exc.open')).map(el=>el.id);
   ss(s);renderWorkout();
+  // restore open state after re-render
+  openIds.forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('open');});
 }
 
 function showReplaceModal(exId,wkKey){
